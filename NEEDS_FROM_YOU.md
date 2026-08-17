@@ -4,13 +4,13 @@
 
 ## ⛔ 1. GitHub 仓库
 
-- [ ] 在 GitHub 创建仓库 `vue-monaco-editor`（或其他名字）
+- [ ] 在 GitHub 创建仓库 `vue-monaco-ide`（或其他名字）
 - [ ] 全局替换 `TODO-OWNER` 为你的 GitHub 用户名/组织名，涉及文件：
   - `package.json`（repository / bugs / homepage）
   - `README.md`（徽章、clone 地址、目录链接）
   - `CHANGELOG.md`（版本对比链接）
   - `CONTRIBUTING.md`、`LICENSE`（版权署名）、`docs/pr-example.md`
-- [ ] 推送：`git remote add origin git@github.com:<owner>/vue-monaco-editor.git && git push -u origin main`
+- [ ] 推送：`git remote add origin git@github.com:<owner>/vue-monaco-ide.git && git push -u origin main`
 
 ## ⛔ 2. 开源合规确认
 
@@ -22,7 +22,7 @@
 
 ## ⛔ 3. npm 发布配置
 
-- [ ] 拥有 npm 账号，且 `vue-monaco-editor` 包名可用（`npm view vue-monaco-editor` 检查；被占用则需改名，如 `@<scope>/vue-monaco-editor`，同时改 package.json 的 name 与 exports）
+- [ ] 拥有 npm 账号，且 `vue-monaco-ide` 包名可用（已查证可用；正式发布前可再 `npm view vue-monaco-ide` 复核一次，以防被抢注）
 - [ ] 创建 **Automation** 类型的 Access Token（npmjs.com -> Access Tokens）
 - [ ] 仓库 Settings -> Secrets and variables -> Actions 添加 secret：`NPM_TOKEN`
 - [ ] 仓库 Settings -> Actions -> General -> Workflow permissions 设为 Read and write（release.yml 创建 GitHub Release 用）

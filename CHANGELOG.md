@@ -34,5 +34,5 @@
 - 移除 monaco-yaml worker
 - Markdown 预览由内置 md-editor-v3 改为 `#preview` 插槽
 
-[Unreleased]: https://github.com/TODO-OWNER/vue-monaco-editor/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/TODO-OWNER/vue-monaco-editor/releases/tag/v0.1.0
+[Unreleased]: https://github.com/TODO-OWNER/vue-monaco-ide/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/TODO-OWNER/vue-monaco-ide/releases/tag/v0.1.0

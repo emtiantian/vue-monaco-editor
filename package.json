@@ -1,5 +1,5 @@
 {
-  "name": "vue-monaco-editor",
+  "name": "vue-monaco-ide",
   "version": "0.1.0",
   "description": "A zero-UI-framework Vue 3 code editor workbench built on Monaco Editor, with full Python IntelliSense powered by Pyright LSP. Supports TS/JS/Python/Markdown/JSON with a file tree, tabs and cross-file navigation.",
   "type": "module",
@@ -16,13 +16,13 @@
     "typescript",
     "file-tree"
   ],
-  "main": "./dist/vue-monaco-editor.js",
-  "module": "./dist/vue-monaco-editor.js",
+  "main": "./dist/vue-monaco-ide.js",
+  "module": "./dist/vue-monaco-ide.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/vue-monaco-editor.js"
+      "import": "./dist/vue-monaco-ide.js"
     },
     "./style.css": "./dist/style.css"
   },
@@ -81,10 +81,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TODO-OWNER/vue-monaco-editor.git"
+    "url": "git+https://github.com/TODO-OWNER/vue-monaco-ide.git"
   },
   "bugs": {
-    "url": "https://github.com/TODO-OWNER/vue-monaco-editor/issues"
+    "url": "https://github.com/TODO-OWNER/vue-monaco-ide/issues"
   },
-  "homepage": "https://github.com/TODO-OWNER/vue-monaco-editor#readme"
+  "homepage": "https://github.com/TODO-OWNER/vue-monaco-ide#readme"
 }

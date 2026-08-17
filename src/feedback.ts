@@ -21,7 +21,7 @@ export interface FeedbackProvider {
   confirm: (options: ConfirmOptions) => Promise<boolean>
 }
 
-const STYLE_ID = 'vue-monaco-editor-feedback-style'
+const STYLE_ID = 'vue-monaco-ide-feedback-style'
 const STYLE_CSS = `
 .vme-toast {
   position: fixed;

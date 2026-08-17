@@ -29,7 +29,7 @@ result = add(1, 2)
 # 取消下一行注释可以看到 Pyright 类型检查报错
 # result = add("1", "2")
 
-print(greet("vue-monaco-editor"))
+print(greet("vue-monaco-ide"))
 print(result)
 `,
   },
@@ -104,7 +104,7 @@ function log(event: string) {
 <template>
   <div class="page">
     <div class="page__toolbar">
-      <span>vue-monaco-editor playground（worker 默认走 CDN，首次打开 Python 文件会加载 Pyright ~25MB）</span>
+      <span>vue-monaco-ide playground（worker 默认走 CDN，首次打开 Python 文件会加载 Pyright ~25MB）</span>
       <span class="page__event">{{ lastEvent }}</span>
     </div>
     <div class="page__editor">

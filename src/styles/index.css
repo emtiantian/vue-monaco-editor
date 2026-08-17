@@ -1,5 +1,5 @@
 /**
- * vue-monaco-editor 全局样式。
+ * vue-monaco-ide 全局样式。
  *
  * 仅包含 CSS 变量与少量全局动画；组件内部样式均为 scoped，
  * 所有 class 以 vme- 前缀隔离，避免与宿主应用冲突。

@@ -1,14 +1,14 @@
 /**
- * vue-monaco-editor 插件入口
+ * vue-monaco-ide 插件入口
  *
  * 用法一（推荐，全局插件）：
- *   import VueMonacoEditor from 'vue-monaco-editor'
- *   import 'vue-monaco-editor/style.css'
+ *   import VueMonacoEditor from 'vue-monaco-ide'
+ *   import 'vue-monaco-ide/style.css'
  *   app.use(VueMonacoEditor, { workerUrls: { ... } })
  *
  * 用法二（直接使用组件）：
- *   import { VueMonacoEditor } from 'vue-monaco-editor'
- *   import 'vue-monaco-editor/style.css'
+ *   import { VueMonacoEditor } from 'vue-monaco-ide'
+ *   import 'vue-monaco-ide/style.css'
  */
 import type { App, Plugin } from 'vue'
 import type { ConfigureWorkersOptions } from './utils/monaco-environment'

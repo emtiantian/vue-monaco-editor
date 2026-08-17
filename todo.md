@@ -12,19 +12,20 @@
   - `CONTRIBUTING.md`、`LICENSE`（版权署名）、`docs/pr-example.md`
 - [ ] 推送：`git remote add origin git@github.com:<owner>/<repo>.git && git push -u origin main`
 
-### ⚠️ 包名决策（2026-08-17 查证）
+### ✅ 包名决策（2026-08-17 已确定：`vue-monaco-ide`）
 
-npm 包名 `vue-monaco-editor` **已被占用**（v0.0.19，维护者 matt-oconnell），
-`@vue-monaco/editor` 也已被占用（v0.0.6）。以下名字可用（已查证 404）：
+背景：npm 包名 `vue-monaco-editor` **已被占用**（v0.0.19，维护者 matt-oconnell），
+`@vue-monaco/editor` 也已被占用（v0.0.6）。
 
-- `vue-monaco-pyright`（推荐：突出 Python 智能提示的差异化定位）
-- `vue-monaco-workbench`（体现「工作台」定位）
-- `vue-monaco-pyright-editor`
-- `monaco-vue-workbench`
-- `vue-monaco-ide`
-- 或自有 scope：`@<你的scope>/vue-monaco-editor`
+**已决策使用 `vue-monaco-ide`**（查证可用），并已完成全局改名：
 
-确定名字后需同步修改：`package.json` 的 `name`、README 安装命令与徽章、CHANGELOG。
+- `package.json` 的 `name` / `main` / `module` / `exports` / `repository` 等
+- 构建产物文件名（`dist/vue-monaco-ide.js`，见 vite.config.ts）
+- README 安装命令与徽章、CHANGELOG、CONTRIBUTING、playground、feedback 样式 ID 等
+
+组件名 `VueMonacoEditor`、CSS 前缀 `vme-`、Monaco 主题名 `web-code-editor-light/dark` 保持不变（仅包名变更）。
+
+发布前如需再复核：`npm view vue-monaco-ide`（以防被抢注）。
 
 ### npm 发布前置（仓库建好后）
 

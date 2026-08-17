@@ -1,11 +1,11 @@
-# vue-monaco-editor
+# vue-monaco-ide
 
 一个基于 [Monaco Editor](https://github.com/microsoft/monaco-editor) 与 [monaco-pyright-lsp](https://www.npmjs.com/package/monaco-pyright-lsp) 的 **Vue 3 代码编辑器工作台组件**：文件树 + 多页签 + 编辑器一体，内置 **Pyright 全功能 Python LSP**，开箱即用。
 
 **运行时只依赖 `monaco-editor` 与 `monaco-pyright-lsp`（及 `vscode-languageserver` 协议库）——不依赖任何 UI 组件库、CSS 框架。**
 
-[![CI](https://github.com/TODO-OWNER/vue-monaco-editor/actions/workflows/ci.yml/badge.svg)](https://github.com/TODO-OWNER/vue-monaco-editor/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/vue-monaco-editor)](https://www.npmjs.com/package/vue-monaco-editor)
+[![CI](https://github.com/TODO-OWNER/vue-monaco-ide/actions/workflows/ci.yml/badge.svg)](https://github.com/TODO-OWNER/vue-monaco-ide/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/vue-monaco-ide)](https://www.npmjs.com/package/vue-monaco-ide)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -63,8 +63,8 @@
 ## 在线体验
 
 ```bash
-git clone https://github.com/TODO-OWNER/vue-monaco-editor.git
-cd vue-monaco-editor
+git clone https://github.com/TODO-OWNER/vue-monaco-ide.git
+cd vue-monaco-ide
 pnpm install
 pnpm dev          # 打开 playground（默认 http://localhost:5180）
 ```
@@ -72,9 +72,9 @@ pnpm dev          # 打开 playground（默认 http://localhost:5180）
 ## 安装
 
 ```bash
-pnpm add vue-monaco-editor monaco-editor monaco-pyright-lsp
+pnpm add vue-monaco-ide monaco-editor monaco-pyright-lsp
 # 或
-npm install vue-monaco-editor monaco-editor monaco-pyright-lsp
+npm install vue-monaco-ide monaco-editor monaco-pyright-lsp
 ```
 
 要求：Vue `^3.3`，monaco-editor `0.50 ~ 0.52`，monaco-pyright-lsp `0.1.x`。
@@ -86,9 +86,9 @@ npm install vue-monaco-editor monaco-editor monaco-pyright-lsp
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import VueMonacoEditor from 'vue-monaco-editor'
+import VueMonacoEditor from 'vue-monaco-ide'
 // 全局样式（CSS 变量 + 反馈弹窗样式，必须引入）
-import 'vue-monaco-editor/style.css'
+import 'vue-monaco-ide/style.css'
 import App from './App.vue'
 
 createApp(App)
@@ -99,7 +99,7 @@ createApp(App)
 ```vue
 <!-- App.vue -->
 <script setup lang="ts">
-import type { FileInput } from 'vue-monaco-editor'
+import type { FileInput } from 'vue-monaco-ide'
 
 const files: FileInput[] = [
   { path: '/src/utils.py', name: 'utils.py', language: 'python', content: 'def add(a: int, b: int) -> int:\n    return a + b\n' },
@@ -125,8 +125,8 @@ const files: FileInput[] = [
 
 ```vue
 <script setup lang="ts">
-import { VueMonacoEditor } from 'vue-monaco-editor'
-import 'vue-monaco-editor/style.css'
+import { VueMonacoEditor } from 'vue-monaco-ide'
+import 'vue-monaco-ide/style.css'
 </script>
 ```
 
@@ -160,7 +160,7 @@ Monaco 与 Pyright 的语言服务都运行在 Web Worker 中，worker 脚本的
 把从 npm 包复制的 worker 文件放到你的静态目录或私有 CDN：
 
 ```ts
-import { configureWorkers } from 'vue-monaco-editor'
+import { configureWorkers } from 'vue-monaco-ide'
 
 configureWorkers({
   workerUrls: {
@@ -262,7 +262,7 @@ import {
   VueMonacoEditor,     // 主组件（别名 WebCodeEditor）
   configureWorkers,    // worker 配置
   setFeedbackProvider, // 接管 toast / confirm 弹窗
-} from 'vue-monaco-editor'
+} from 'vue-monaco-ide'
 ```
 
 ## 定制与扩展
@@ -287,7 +287,7 @@ import {
 内置零依赖的 toast 与 confirm（删除确认）。宿主有 UI 框架时可接管：
 
 ```ts
-import { setFeedbackProvider } from 'vue-monaco-editor'
+import { setFeedbackProvider } from 'vue-monaco-ide'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 setFeedbackProvider({
@@ -311,7 +311,7 @@ setFeedbackProvider({
 
 ## 与其他编辑器方案对比
 
-| 能力 | **vue-monaco-editor** | @guolao/vue-monaco-editor[^1] | monaco-vue / @logo-element/markdown-it 等封装[^2] | CodeSandbox / StackBlitz（在线 IDE 平台） | VS Code Web（monaco + services） |
+| 能力 | **vue-monaco-ide** | @guolao/vue-monaco-ide[^1] | monaco-vue / @logo-element/markdown-it 等封装[^2] | CodeSandbox / StackBlitz（在线 IDE 平台） | VS Code Web（monaco + services） |
 | --- | --- | --- | --- | --- | --- |
 | 定位 | Vue 组件库：**工作台级**（文件树+页签+编辑器） | Vue 组件库：**单编辑器** 包装 | 单编辑器包装 | 完整 SaaS 平台 | 完整 Web IDE |
 | Python 智能提示 | ✅ **Pyright LSP 全功能**（补全/悬停/跳转/重命名/类型检查，内置 typeshed） | ❌ 仅基本高亮（Monaco 对 Python 无内置语言服务） | ❌ 同左 | ✅（平台自带 Pyright） | ✅ |
@@ -325,7 +325,7 @@ setFeedbackProvider({
 | 自建文件系统/后端要求 | ❌ 不需要（文件为受控 prop） | - | - | ✅ 平台 API | ✅ 需实现 IFileSystemProvider 等 |
 | 适合场景 | 低代码平台/AI Agent 工作台/在线作业编辑等需要**嵌入式多文件代码编辑**的 Vue 应用 | 表单里的单个代码输入框 | 同左 | 独立编程教育/预览站 | 需要完整 IDE 体验且愿意承担组装成本 |
 
-[^1]: @guolao/vue-monaco-editor 是优秀的**单编辑器** Vue 包装，如果你只需要一个代码输入框，它更轻；需要多文件工作台与 Python 智能提示时选本库。
+[^1]: @guolao/vue-monaco-ide 是优秀的**单编辑器** Vue 包装，如果你只需要一个代码输入框，它更轻；需要多文件工作台与 Python 智能提示时选本库。
 [^2]: 泛指各类 monaco 的 Vue 薄封装，普遍不包含工作台与 Python LSP。
 
 **一句话总结**：常见 Vue + Monaco 封装停留在「把 Monaco 挂进 Vue」；本库目标是把 **「VS Code 级多文件智能编辑体验」以一个受控组件的形式嵌进任意 Vue 3 应用**，且不引入任何 UI 框架与后端要求。

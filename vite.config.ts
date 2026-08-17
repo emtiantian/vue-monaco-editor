@@ -1,7 +1,7 @@
 /**
- * vue-monaco-editor 库构建配置。
+ * vue-monaco-ide 库构建配置。
  *
- * - 库模式构建，入口 src/index.ts，产物 ESM（dist/vue-monaco-editor.js + dist/style.css）
+ * - 库模式构建，入口 src/index.ts，产物 ESM（dist/vue-monaco-ide.js + dist/style.css）
  * - vue / monaco-editor / monaco-pyright-lsp 全部 external（peerDependencies），
  *   由宿主应用安装并提供，避免 monaco 被重复打包
  * - worker 不打包：默认走 CDN，或由宿主通过 configureWorkers 提供本地 worker URL
@@ -23,7 +23,7 @@ export default defineConfig({
       entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
       name: 'VueMonacoEditor',
       formats: ['es'],
-      fileName: () => 'vue-monaco-editor.js',
+      fileName: () => 'vue-monaco-ide.js',
     },
     outDir: 'dist',
     cssCodeSplit: false,

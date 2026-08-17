@@ -1,6 +1,6 @@
 # 贡献指南
 
-感谢关注 vue-monaco-editor！
+感谢关注 vue-monaco-ide！
 
 ## 环境准备
 
