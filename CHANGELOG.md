@@ -9,7 +9,7 @@
 
 ## [0.1.0] - 2026-08-17
 
-首个公开版本。从内部项目 `ui-aigc-apps-next` 的 `web-code-editor` 组件重构为独立 Vue 3 插件。
+首个公开版本。由内部项目的 `web-code-editor` 组件重构为独立 Vue 3 插件。
 
 ### 新增
 

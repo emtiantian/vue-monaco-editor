@@ -6,7 +6,7 @@
 
 /**
  * 获取父目录路径
- * @param path 文件或目录路径，例如 /skills/test.py
+ * @param path 文件或目录路径，例如 /src/test.py
  * @param defaultPath 当 path 位于根目录时返回的默认值
  */
 export function getParentPath(path: string, defaultPath: string = '/'): string {

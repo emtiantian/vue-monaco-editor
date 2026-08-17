@@ -11,13 +11,13 @@ const blobUrlCache = new Map<string, string>()
 /**
  * 创建 Web Worker，透明处理跨域脚本。
  *
- * 在 qiankun 微前端开发环境下，宿主页面 Origin（如 http://10.0.0.195:8080）
- * 与 Vite dev-server Origin（http://localhost:9000）不同，浏览器会拒绝
+ * 在微前端（如 qiankun）或静态资源独立域名部署的场景下，页面 Origin
+ * （如 http://host-a:8080）与资源服务器 Origin（http://host-b:9000）不同，浏览器会拒绝
  * `new Worker(crossOriginUrl)`。本工具先用同源的 blob URL 启动 Worker，
  * 再由该 Worker 通过 `import()`（ES Module Worker）或 `importScripts()`
  *（Classic Worker）加载真实脚本，从而绕过同源限制。
  *
- * 依赖 Vite dev-server 默认开启的 CORS；同 Origin 时仍走原生路径，
+ * 依赖资源服务器开启 CORS；同 Origin 时仍走原生路径，
  * 避免不必要的 blob 开销。
  */
 export function createCrossOriginWorker(

@@ -39,7 +39,7 @@ async function doInitPythonLsp(
   initialUserFiles = userFiles
 
   // worker 把 userFiles 固定写入 /typings 目录（createUserFiles("/typings", ...)），
-  // 原路径 /skills/test.py 落在 /typings/skills/test.py。注入 userFiles 让 Pyright 文件系统
+  // 原路径 /src/test.py 落在 /typings/src/test.py。注入 userFiles 让 Pyright 文件系统
   // 拥有这些文件，再通过 extraPaths 指向 /typings 下的对应目录，使 from utils import
   // 等导入能解析到同目录模块，进而让跨文件类型检查（如 add("1","2") 类型不匹配）能报错。
   const nestedUserFiles = userFiles ? groupFilesByDirectory(userFiles) : undefined
@@ -47,9 +47,9 @@ async function doInitPythonLsp(
 
   // projectPath 用 '/tmp'：worker 的 /tmp 由 initFs 挂载为空 InMemory 目录，既存在
   // 又不含 typeshed-fallback（/typeshed-fallback）。若用 '/'，Pyright 会把整个 '/' 当
-  // workspace 全量扫描 4457 个 typeshed 文件导致卡死；若用不存在的 '/skills' 同样卡死。
+  // workspace 全量扫描 4457 个 typeshed 文件导致卡死；若用不存在的 '/src' 同样卡死。
   // 用户文件不纳入 workspace 扫描，仅靠 extraPaths 参与 import 解析；文件内容同步仍由
-  // syncAllPythonFilesToLsp 的 didOpen 负责，诊断回到 model 原始 uri（/skills/test.py）。
+  // syncAllPythonFilesToLsp 的 didOpen 负责，诊断回到 model 原始 uri（/src/test.py）。
   provider = new MonacoPyrightProvider({
     projectPath: '/tmp',
     userFiles: nestedUserFiles,
@@ -102,8 +102,8 @@ async function syncAllPythonFilesToLsp() {
  * 适配 monaco-pyright-lsp worker 的 createUserFiles 路径处理逻辑。
  *
  * @example
- *   groupFilesByDirectory({ '/skills/test.py': '...', '/skills/utils.py': '...' })
- *   // => { '/skills': { 'test.py': '...', 'utils.py': '...' } }
+ *   groupFilesByDirectory({ '/src/test.py': '...', '/src/utils.py': '...' })
+ *   // => { '/src': { 'test.py': '...', 'utils.py': '...' } }
  */
 function groupFilesByDirectory(files: Record<string, string>): UserFolder {
   const root: UserFolder = {}
@@ -128,7 +128,7 @@ function groupFilesByDirectory(files: Record<string, string>): UserFolder {
 /**
  * 计算用户文件在 worker 文件系统中的目录列表，用作 Pyright extraPaths。
  *
- * worker 把 userFiles 写入 /typings 前缀下，原路径 /skills/test.py 落在 /typings/skills/test.py。
+ * worker 把 userFiles 写入 /typings 前缀下，原路径 /src/test.py 落在 /typings/src/test.py。
  * Pyright 解析 from utils import 时会按 extraPaths 逐目录查找模块，因此需把每个用户文件
  * 所在目录（加 /typings 前缀）列入 extraPaths，使同目录/跨目录导入可解析。
  */
@@ -259,7 +259,7 @@ export function attachPythonLsp(editor: monacoTypes.editor.IStandaloneCodeEditor
  * 清理全局 model 监听与文档同步状态，释放内存。
  *
  * 多个编辑器实例共享全局 provider，故用引用计数，只有最后一个实例卸载才销毁。
- * 销毁后状态全部重置，允许后续 initPythonLsp 重新初始化（qiankun 子应用重新挂载场景）。
+ * 销毁后状态全部重置，允许后续 initPythonLsp 重新初始化（微前端子应用重新挂载场景）。
  */
 export function destroyPythonLsp(): void {
   providerRefCount = Math.max(0, providerRefCount - 1)

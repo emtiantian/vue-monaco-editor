@@ -33,7 +33,7 @@ import 'monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestController.js
 // peek 视图依赖
 import 'monaco-editor/esm/vs/editor/contrib/peekView/browser/peekView.js'
 
-// 与 task-editor 能力对齐：链接检测与代码折叠
+// 对齐主流编辑器体验：链接检测与代码折叠
 import 'monaco-editor/esm/vs/editor/contrib/links/browser/links.js'
 import 'monaco-editor/esm/vs/editor/contrib/folding/browser/folding.js'
 
