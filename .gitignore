@@ -1,0 +1,9 @@
+dist
+node_modules
+coverage
+*.local
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.tsbuildinfo

@@ -1,0 +1,40 @@
+/**
+ * vue-monaco-editor 全局样式。
+ *
+ * 仅包含 CSS 变量与少量全局动画；组件内部样式均为 scoped，
+ * 所有 class 以 vme- 前缀隔离，避免与宿主应用冲突。
+ *
+ * 宿主可通过覆盖这些变量定制主题（如匹配品牌色）：
+ *   --vme-primary: 主色（激活态、发布按钮）
+ *   --vme-accent: 文件树操作按钮 hover 色
+ *   --vme-text / --vme-text-strong: 正文/标题文字色
+ *   --vme-bg / --vme-bg-deep: 面板背景/次级背景
+ *   --vme-border / --vme-border-light: 边框色
+ *   --vme-hover / --vme-hover-strong: hover 背景
+ *   --vme-success / --vme-warning: 已保存/未保存状态色
+ */
+:root {
+  --vme-primary: #1677ff;
+  --vme-accent: #5b3ff0;
+  --vme-accent-bg: #f5f2ff;
+  --vme-text: #333333;
+  --vme-text-strong: #1f1f1f;
+  --vme-bg: #ffffff;
+  --vme-bg-deep: #fafafa;
+  --vme-border: #e8e8e8;
+  --vme-border-light: #f0f0f0;
+  --vme-hover: #f5f5f5;
+  --vme-hover-strong: #e8e8e8;
+  --vme-success: #52c41a;
+  --vme-warning: #fa8c16;
+}
+
+@keyframes vme-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.vme-icon-spin {
+  animation: vme-rotate 1s linear infinite;
+}

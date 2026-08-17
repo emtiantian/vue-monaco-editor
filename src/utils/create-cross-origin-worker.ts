@@ -1,0 +1,55 @@
+export interface CreateCrossOriginWorkerOptions extends WorkerOptions {
+  /**
+   * 在 worker 全局作用域中、加载目标脚本之前执行的 JS 代码。
+   * 用于注入 Monaco 等库依赖的全局变量（如 `globalThis._VSCODE_FILE_ROOT`）。
+   */
+  workerGlobalSetup?: string
+}
+
+const blobUrlCache = new Map<string, string>()
+
+/**
+ * 创建 Web Worker，透明处理跨域脚本。
+ *
+ * 在 qiankun 微前端开发环境下，宿主页面 Origin（如 http://10.0.0.195:8080）
+ * 与 Vite dev-server Origin（http://localhost:9000）不同，浏览器会拒绝
+ * `new Worker(crossOriginUrl)`。本工具先用同源的 blob URL 启动 Worker，
+ * 再由该 Worker 通过 `import()`（ES Module Worker）或 `importScripts()`
+ *（Classic Worker）加载真实脚本，从而绕过同源限制。
+ *
+ * 依赖 Vite dev-server 默认开启的 CORS；同 Origin 时仍走原生路径，
+ * 避免不必要的 blob 开销。
+ */
+export function createCrossOriginWorker(
+  url: string,
+  options?: CreateCrossOriginWorkerOptions,
+): Worker {
+  const resolved = new URL(url, globalThis.location.href)
+  const { workerGlobalSetup: setupScriptRaw, ...workerOptions } = options || {}
+  const setupScript = setupScriptRaw?.trim()
+
+  // 同源且无需要注入的全局脚本：直接走原生路径，保留 source-map 与命名行为
+  if (resolved.origin === globalThis.location.origin && !setupScript) {
+    return new Worker(resolved.href, workerOptions)
+  }
+
+  const targetUrl = resolved.href
+  const cacheKey = `${targetUrl}#${workerOptions.type || 'classic'}#${setupScript || ''}`
+
+  let blobUrl = blobUrlCache.get(cacheKey)
+  if (!blobUrl) {
+    const importStatement = workerOptions.type === 'module'
+      ? `import ${JSON.stringify(targetUrl)};`
+      : `importScripts(${JSON.stringify(targetUrl)});`
+
+    const loader = setupScript
+      ? `${setupScript}\n${importStatement}`
+      : importStatement
+
+    const blob = new Blob([loader], { type: 'application/javascript' })
+    blobUrl = URL.createObjectURL(blob)
+    blobUrlCache.set(cacheKey, blobUrl)
+  }
+
+  return new Worker(blobUrl, workerOptions)
+}
