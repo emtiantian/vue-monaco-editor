@@ -54,7 +54,8 @@
     "pack-check": "npm pack --dry-run",
     "test": "vitest run",
     "build:playground": "vite build --config playground/vite.config.ts",
-    "check": "pnpm lint && pnpm type-check && pnpm test && pnpm build && pnpm build:playground",
+    "build:site": "vite build --config site/vite.config.ts",
+    "check": "pnpm lint && pnpm type-check && pnpm test && pnpm build && pnpm build:playground && pnpm build:site",
     "prepack": "pnpm build"
   },
   "peerDependencies": {
