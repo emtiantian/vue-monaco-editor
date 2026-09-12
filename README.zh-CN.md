@@ -2,6 +2,8 @@
 
 [English](README.md) | 简体中文
 
+代码仓库：[github.com/emtiantian/vue-monaco-editor](https://github.com/emtiantian/vue-monaco-editor) · 演示：[GitHub Pages](https://emtiantian.github.io/vue-monaco-editor/)
+
 一个基于 [Monaco Editor](https://github.com/microsoft/monaco-editor) 与 [monaco-pyright-lsp](https://www.npmjs.com/package/monaco-pyright-lsp) 的 **Vue 3 代码编辑器工作台组件**：文件树 + 多页签 + 编辑器一体，集成 **Pyright Python LSP**，开箱即用。
 
 **运行时只依赖 `monaco-editor` 与 `monaco-pyright-lsp`（及 `vscode-languageserver` 协议库）——不依赖任何 UI 组件库、CSS 框架。**
@@ -483,4 +485,3 @@ pnpm pack-check    # 预览 npm 包内容
 ## License
 
 [MIT](LICENSE)，作者 hao503106@163.com（[GitHub](https://github.com/emtiantian)）。
-

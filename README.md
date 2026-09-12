@@ -6,6 +6,8 @@ A Vue 3 component combining a Monaco code editor, file tree and tabs. It integra
 
 Version 0.2.0 is a release candidate and has not been published in this preparation pass. No hosted demo is available yet; use `pnpm dev` for the local playground.
 
+Repository: [github.com/emtiantian/vue-monaco-editor](https://github.com/emtiantian/vue-monaco-editor) · Demo: [GitHub Pages](https://emtiantian.github.io/vue-monaco-editor/)
+
 ## Installation
 
 After publication:

@@ -31,7 +31,7 @@
 - **非文本文件体系**：新增 `FileKind` 四分类（text/image/pdf/binary），判定优先级为显式标记 > 扩展名 > 内容嗅探；image/pdf 带 `remoteUrl` 时在线预览（`mediaPreview` prop 可关），binary 走下载占位卡片并触发 `download` 事件
 - **`savedContent` 基线**：脏状态以 `savedContent ?? content` 为准，支持「云端内容 ≠ 本地草稿」场景
 - **彩色文件类型图标**：内置 50+ 高频扩展名的 vscode-icons 风格 SVG 图标（零依赖内联双色 glyph），目录折叠/展开双态，冷门扩展名回退原文字徽章
-- **yaml 语言服务**：可选子入口 `vue-monaco-ide/yaml` + 可选 peer `monaco-yaml@^5`；基础高亮开箱即用，引入子入口后获得 schema 校验/补全/悬停；worker 默认走 jsDelivr `/+esm` 端点，支持 `workerUrls.yaml` 指定或 `false` 禁用
+- **yaml 语言服务**：可选子入口 `@emtt/vue-monaco-ide/yaml` + 可选 peer `monaco-yaml@^5`；基础高亮开箱即用，引入子入口后获得 schema 校验/补全/悬停；worker 默认走 jsDelivr `/+esm` 端点，支持 `workerUrls.yaml` 指定或 `false` 禁用
 - **内置 Markdown 预览**：`builtinMarkdownPreview` prop 启用零依赖轻量渲染器（标题/代码块/列表/引用/表格/行内标记）；安全模型为白名单重建（全转义 + 标签/属性/URL 协议三方白名单）；`#preview` 插槽仍优先
 - **目录深度上限**：路径层级最多 10 层（`MAX_PATH_DEPTH`），新建与跨目录拖拽均校验子孙深度
 - **实例方法 `setFileContent(path, content)`**：外部写入内容并标记已保存（revision 冲突回写）
@@ -61,7 +61,7 @@
 - `#preview` 作用域插槽：由使用方注入 Markdown 渲染器
 - Worker 加载三档策略：CDN 默认 / 指定 URL / 完全接管 `getWorker`
 - 零 UI 框架依赖：内置 SVG 图标、scoped CSS、CSS 变量主题、可接管的 toast/confirm
-- GitHub Actions：CI（lint/type-check/build/pack）与 push tag 自动发布（含 provenance、版本一致性校验、自动 GitHub Release）
+- GitHub Actions：CI（lint/type-check/test/build/pack）与 GitHub Pages 演示站部署；npm 保持手动发布
 
 ### 与内部版本（web-code-editor）的差异
 

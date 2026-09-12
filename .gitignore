@@ -10,3 +10,8 @@ coverage
 
 artifacts/
 *.tgz
+
+# Local agent and AI workspace context
+.context/
+.codex/
+.agents/

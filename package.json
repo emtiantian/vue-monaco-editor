@@ -107,5 +107,8 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "packageManager": "pnpm@10.7.1"
+  "packageManager": "pnpm@10.7.1",
+  "repository": { "type": "git", "url": "git+https://github.com/emtiantian/vue-monaco-editor.git" },
+  "homepage": "https://emtiantian.github.io/vue-monaco-editor/",
+  "bugs": { "url": "https://github.com/emtiantian/vue-monaco-editor/issues" }
 }

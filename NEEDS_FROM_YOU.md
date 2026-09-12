@@ -4,10 +4,10 @@
 
 ## 发布前待完成
 
-- 提供并核实实际 GitHub 仓库地址。目前没有 Git remote；旧的 `TODO-OWNER` 元数据已移除。必须补齐 `package.json` 的 `repository`、`homepage`、`bugs.url`，并在双语 README 添加真实仓库链接。
+- [x] GitHub 仓库已确认：`git@github.com:emtiantian/vue-monaco-editor.git`；已补齐包元数据、双语 README 并配置 `origin`。
 - 重新登录 npm：本次 `npm whoami --registry=https://registry.npmjs.org/` 返回 401。使用 `npm login --registry=https://registry.npmjs.org/` 完成登录，然后核实账号具有 `@emtt` scope 发布权限。
 - 2026-09-12 官方 registry 查询包名返回 404，表示未找到公开包，不保证 scope 权限或未来仍可用。正式发布前再次查询名称和精确版本。
-- 浏览器人工验收：Python 补全/跨文件跳转、TS/JS 跳转与实际部署环境的 Worker 加载。当前没有已部署演示站及截图。
+- [ ] Pages 首次部署后进行浏览器验收：Python 补全/跨文件跳转、TS/JS 跳转、Worker 加载与响应式布局。
 
 ## 本次变更
 
@@ -34,4 +34,4 @@ pnpm pack --pack-destination artifacts
 pnpm publish artifacts/emtt-vue-monaco-ide-0.2.0.tgz --access public --registry=https://registry.npmjs.org/
 ```
 
-本轮仅准备，未发布 npm、未创建远端仓库、未推送提交或标签。
+本轮已配置远程并准备推送 `main`；npm 尚未发布，Pages 需 Actions 首次成功后确认。
