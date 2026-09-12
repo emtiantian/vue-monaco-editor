@@ -17,19 +17,29 @@ declare global {
   var _VSCODE_FILE_ROOT: string | undefined
 }
 
-export type WorkerLabel = 'editor' | 'json' | 'css' | 'html' | 'typescript' | 'javascript'
+export type WorkerLabel = 'editor' | 'json' | 'css' | 'html' | 'typescript' | 'javascript' | 'yaml'
 
 /** 各 worker 的默认 CDN 路径（按已安装版本 pin） */
 const MONACO_CDN_BASE = `https://cdn.jsdelivr.net/npm/monaco-editor@${(monacoEditorPkg as { version: string }).version}`
 const PYRIGHT_CDN_BASE = `https://cdn.jsdelivr.net/npm/monaco-pyright-lsp@${(monacoPyrightPkg as { version: string }).version}`
 
-const DEFAULT_WORKER_PATHS: Record<WorkerLabel, string> = {
-  editor: '/esm/vs/editor/editor.worker.js',
-  json: '/esm/vs/language/json/json.worker.js',
-  css: '/esm/vs/language/css/css.worker.js',
-  html: '/esm/vs/language/html/html.worker.js',
-  typescript: '/esm/vs/language/typescript/ts.worker.js',
-  javascript: '/esm/vs/language/typescript/ts.worker.js',
+/**
+ * yaml worker 默认地址（jsDelivr /+esm 打包端点）。
+ *
+ * monaco-yaml 是可选 peer，不能读取安装包版本号，这里硬编码 pin；
+ * npm 包内的 yaml.worker.js 含裸模块导入不能直指，必须走 /+esm 打包端点。
+ */
+const YAML_WORKER_DEFAULT_URL = 'https://cdn.jsdelivr.net/npm/monaco-yaml@5.4.0/yaml.worker.js/+esm'
+
+/** 完整 URL 形式（yaml 不在 monaco-editor 包内，统一存全量地址） */
+const DEFAULT_WORKER_URLS: Record<WorkerLabel, string> = {
+  editor: `${MONACO_CDN_BASE}/esm/vs/editor/editor.worker.js`,
+  json: `${MONACO_CDN_BASE}/esm/vs/language/json/json.worker.js`,
+  css: `${MONACO_CDN_BASE}/esm/vs/language/css/css.worker.js`,
+  html: `${MONACO_CDN_BASE}/esm/vs/language/html/html.worker.js`,
+  typescript: `${MONACO_CDN_BASE}/esm/vs/language/typescript/ts.worker.js`,
+  javascript: `${MONACO_CDN_BASE}/esm/vs/language/typescript/ts.worker.js`,
+  yaml: YAML_WORKER_DEFAULT_URL,
 }
 
 const LANGUAGE_WORKER_LABELS: Record<string, WorkerLabel> = {
@@ -39,6 +49,14 @@ const LANGUAGE_WORKER_LABELS: Record<string, WorkerLabel> = {
   less: 'css',
   html: 'html',
   handlebars: 'html',
+  yaml: 'yaml',
+}
+
+/** JSON Schema 关联配置（与 monaco-yaml 的 Options['schemas'] 结构一致，避免依赖其类型） */
+export interface YamlSchemaOption {
+  fileMatch?: string[]
+  uri?: string
+  schema?: Record<string, unknown>
 }
 
 /** configureWorkers 的可选配置 */
@@ -52,6 +70,14 @@ export interface ConfigureWorkersOptions {
   /** Pyright LSP worker 脚本 URL（monaco-pyright-lsp/dist/worker.js） */
   pyrightWorkerUrl?: string
   /**
+   * yaml worker 脚本 URL（默认 jsDelivr /+esm 端点，见 YAML_WORKER_DEFAULT_URL）。
+   * 传入 `false` 禁用 yaml 专属 worker（回退 editor worker，仅保留基础高亮）。
+   * 需配合子入口 `vue-monaco-ide/yaml` 使用；未引入子入口时本项不生效。
+   */
+  yamlWorkerUrl?: string | false
+  /** yaml 关联 JSON Schema（传入 monaco-yaml 的 schemas 配置） */
+  yamlSchemas?: YamlSchemaOption[]
+  /**
    * 完全接管 Monaco worker 的创建（等价于直接设置 self.MonacoEnvironment.getWorker）。
    * 适合使用 Vite `?worker` 导入的宿主应用。
    */
@@ -62,11 +88,12 @@ const workerUrls: Partial<Record<WorkerLabel, string>> = {}
 const disabledLabels = new Set<WorkerLabel>()
 let customGetWorker: ((label: string) => Worker) | null = null
 let configured = false
+const yamlSchemas: YamlSchemaOption[] = []
 
 function canonicalLabel(label: string): WorkerLabel {
   if (label === 'javascript')
     return 'typescript'
-  if (label in DEFAULT_WORKER_PATHS)
+  if (label in DEFAULT_WORKER_URLS)
     return label as WorkerLabel
   return 'editor'
 }
@@ -91,9 +118,23 @@ export function configureWorkers(options: ConfigureWorkersOptions): void {
   if (options.pyrightWorkerUrl) {
     pyrightWorkerUrl = options.pyrightWorkerUrl
   }
+  if (options.yamlWorkerUrl === false) {
+    disabledLabels.add('yaml')
+  }
+  else if (options.yamlWorkerUrl) {
+    workerUrls.yaml = options.yamlWorkerUrl
+  }
+  if (options.yamlSchemas) {
+    yamlSchemas.push(...options.yamlSchemas)
+  }
   if (options.getWorker) {
     customGetWorker = options.getWorker
   }
+}
+
+/** 获取 configureWorkers 配置的 yaml schemas（供子入口 subsets/yaml 使用） */
+export function getYamlSchemas(): readonly YamlSchemaOption[] {
+  return yamlSchemas
 }
 
 /** Pyright LSP worker 脚本 URL（可被 configureWorkers 覆盖，默认 CDN） */
@@ -108,7 +149,7 @@ function resolveWorkerUrl(label: WorkerLabel): string {
   const custom = workerUrls[target]
   if (custom)
     return custom
-  return `${MONACO_CDN_BASE}${DEFAULT_WORKER_PATHS[target]}`
+  return DEFAULT_WORKER_URLS[target]
 }
 
 /**
@@ -120,6 +161,18 @@ export async function ensureMonacoEnvironment(options: { labels?: string[] } = {
   if (customGetWorker) {
     self.MonacoEnvironment = { getWorker: customGetWorker }
     configured = true
+    return
+  }
+
+  // 宿主（或页面上另一份 monaco 使用方）已配置过 getWorker 时让宿主优先，
+  // 避免覆写后破坏宿主自身的 worker 解析。
+  const existingGetWorker = self.MonacoEnvironment?.getWorker
+  if (existingGetWorker) {
+    configured = true
+    console.warn(
+      '[vue-monaco-ide] self.MonacoEnvironment.getWorker 已被宿主配置，组件沿用宿主 worker 工厂；'
+      + '如需本库的 CDN worker 方案，请勿提前设置 getWorker 或改用 configureWorkers({ getWorker })',
+    )
     return
   }
 

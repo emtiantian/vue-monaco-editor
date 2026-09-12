@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
+import { t } from './i18n'
 import { useFileStore } from './composables/use-file-store'
 import FileIcon from './file-icon.vue'
 
 const props = withDefaults(defineProps<{
   /** 上次保存时间，如 "16:32"；作为草稿已保存时间的展示值 */
   saveTime?: string | null
-  /** 发布按钮文字 */
+  /** 发布按钮文字（缺省取当前语言的「发布」） */
   publishText?: string
 }>(), {
   saveTime: null,
-  publishText: '发布',
+  publishText: undefined,
 })
 
 const emit = defineEmits<{
@@ -28,11 +29,13 @@ const draftStatus = computed<'saved' | 'dirty' | null>(() =>
 )
 const saveStatusText = computed(() => {
   if (draftStatus.value === 'saved')
-    return '已保存'
+    return t('saved')
   if (draftStatus.value === 'dirty')
-    return '未保存'
+    return t('unsaved')
   return ''
 })
+
+const publishTextResolved = computed(() => props.publishText ?? t('publish'))
 
 function handleTabClick(path: string) {
   setActive(path)
@@ -90,7 +93,7 @@ watch(() => state.activePath, scrollToActiveTab, { immediate: true })
       >
         <FileIcon :filename="tab.name" />
         <span class="vme-tab__name">{{ tab.name }}</span>
-        <span v-if="tab.isDirty" class="vme-tab__dirty-dot" title="未保存">●</span>
+        <span v-if="tab.isDirty" class="vme-tab__dirty-dot" :title="t('unsavedTitle')">●</span>
         <button class="vme-tab__close" @click="handleClose($event, tab.path)">
           ×
         </button>
@@ -104,7 +107,7 @@ watch(() => state.activePath, scrollToActiveTab, { immediate: true })
         <span v-if="draftStatus === 'saved' && saveTime" class="vme-draft__time">{{ saveTime }}</span>
       </span>
       <button type="button" class="vme-publish-btn" @click="emit('publish')">
-        {{ publishText }}
+        {{ publishTextResolved }}
       </button>
     </div>
   </div>

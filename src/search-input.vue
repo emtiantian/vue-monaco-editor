@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t } from './i18n'
 import { IconSearch } from './icons'
 
 const modelValue = defineModel<string>({ default: '' })
@@ -11,7 +12,7 @@ const modelValue = defineModel<string>({ default: '' })
       v-model="modelValue"
       type="text"
       class="vme-search__input"
-      placeholder="搜索文件"
+      :placeholder="t('searchPlaceholder')"
     >
   </div>
 </template>

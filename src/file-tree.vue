@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { t } from './i18n'
 import { useContextMenu } from './composables/use-context-menu'
 import { useFileStore } from './composables/use-file-store'
 import ContextMenu from './context-menu.vue'
@@ -77,24 +78,24 @@ function onDropRoot(e: DragEvent) {
   setDragSource(null)
 }
 
-const contextMenuItems = [
-  { label: '新建文件', action: handleNewFileFromContext },
-  { label: '新建文件夹', action: handleNewFolderFromContext },
-]
+const contextMenuItems = computed(() => [
+  { label: t('newFile'), action: handleNewFileFromContext },
+  { label: t('newFolder'), action: handleNewFolderFromContext },
+])
 </script>
 
 <template>
   <div class="vme-file-tree">
     <div class="vme-file-tree__header">
-      <span class="vme-file-tree__title">文件</span>
+      <span class="vme-file-tree__title">{{ t('fileTreeTitle') }}</span>
       <div class="vme-file-tree__actions">
-        <button class="vme-icon-btn" title="新建文件" @click="handleNewFile">
+        <button class="vme-icon-btn" :title="t('newFile')" @click="handleNewFile">
           <IconPlus :size="16" />
         </button>
-        <button class="vme-icon-btn" title="新建文件夹" @click="handleNewFolder">
+        <button class="vme-icon-btn" :title="t('newFolder')" @click="handleNewFolder">
           <IconFolderAdd :size="16" />
         </button>
-        <button class="vme-icon-btn" title="刷新" @click="emit('refresh')">
+        <button class="vme-icon-btn" :title="t('refresh')" @click="emit('refresh')">
           <IconRefresh :size="16" />
         </button>
       </div>
@@ -114,7 +115,7 @@ const contextMenuItems = [
         <TreeNode v-for="node in filteredTree" :key="node.path" :node="node" :depth="0" />
       </ul>
       <div v-else-if="!isCreatingAtRootLevel" class="vme-file-tree__empty">
-        无匹配文件
+        {{ t('noMatchingFiles') }}
       </div>
     </div>
 

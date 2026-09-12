@@ -19,6 +19,7 @@ pnpm dev   # playground，http://localhost:5180
    ```bash
    pnpm lint
    pnpm type-check
+   pnpm test
    pnpm build
    ```
 3. 在 playground 中手动验证受影响功能（尤其：Python Pyright 补全/跳转、TS 跨文件解析、文件树增删改拖拽、页签、Markdown 预览插槽）
@@ -55,8 +56,6 @@ src/
 └── styles/index.css       # CSS 变量与全局动画
 ```
 
-## 发布流程（维护者）
+## 发布
 
-1. 更新 `package.json` 版本与 `CHANGELOG.md`
-2. CI 通过后打 tag：`git tag vX.Y.Z && git push origin vX.Y.Z`
-3. `release.yml` 自动发布 npm 并创建 GitHub Release（需 `NPM_TOKEN` secret）
+仅手动发布，CI 只执行检查、测试、构建及打包。参见 [发布清单](NEEDS_FROM_YOU.md)。

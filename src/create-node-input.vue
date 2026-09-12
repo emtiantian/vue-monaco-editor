@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue'
+import { t } from './i18n'
 import FileIcon from './file-icon.vue'
 
 const props = defineProps<{
@@ -55,7 +56,7 @@ const indentStyle = {
       ref="inputRef"
       v-model="value"
       class="vme-create-node__input"
-      :placeholder="isDirectory ? '新建文件夹...' : '新建文件...'"
+      :placeholder="isDirectory ? t('createFolderPlaceholder') : t('createFilePlaceholder')"
       @keydown="handleKeydown"
       @blur="handleBlur"
     >

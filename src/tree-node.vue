@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { FileNode } from './types'
 import { computed, nextTick, ref, watch } from 'vue'
+import { t } from './i18n'
 import { useContextMenu } from './composables/use-context-menu'
 import { useFileStore } from './composables/use-file-store'
 import ContextMenu from './context-menu.vue'
@@ -73,11 +74,14 @@ function startRename(e?: Event) {
   renameValue.value = props.node.name
 }
 
-function confirmRename(e: Event) {
+async function confirmRename(e: Event) {
   e.stopPropagation()
   const value = renameValue.value.trim()
   if (value && value !== props.node.name) {
-    renameFile(props.node.path, value)
+    const applied = await renameFile(props.node.path, value)
+    // 失败（重名/服务端钩子拒绝）时保留输入框供改名重试
+    if (!applied)
+      return
   }
   isRenaming.value = false
 }
@@ -269,13 +273,13 @@ async function handleDownload() {
 }
 
 const contextMenuItems = computed(() => [
-  { label: '新建文件', action: handleNewFile },
-  { label: '新建文件夹', action: handleNewFolder },
-  { label: '重命名', action: () => startRename() },
-  { label: '复制绝对路径', action: handleCopyPath },
-  { label: '下载', action: handleDownload },
+  { label: t('newFile'), action: handleNewFile },
+  { label: t('newFolder'), action: handleNewFolder },
+  { label: t('rename'), action: () => startRename() },
+  { label: t('copyPath'), action: handleCopyPath },
+  { label: t('download'), action: handleDownload },
   { label: '', action: () => {}, divider: true },
-  { label: '删除', action: handleDelete, danger: true },
+  { label: t('delete'), action: handleDelete, danger: true },
 ])
 </script>
 

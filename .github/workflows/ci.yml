@@ -35,14 +35,17 @@ jobs:
       - name: Type-check
         run: pnpm type-check
 
+      - name: Test
+        run: pnpm test
+
       - name: Build library
         run: pnpm build
 
       - name: Check npm package contents
-        run: pnpm pack-check
+        run: pnpm pack --pack-destination artifacts
 
       - name: Build playground
-        run: pnpm exec vite build --config playground/vite.config.ts
+        run: pnpm build:playground
 
       - name: Upload library dist
         uses: actions/upload-artifact@v4

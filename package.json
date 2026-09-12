@@ -1,7 +1,7 @@
 {
-  "name": "vue-monaco-ide",
-  "version": "0.1.0",
-  "description": "A zero-UI-framework Vue 3 code editor workbench built on Monaco Editor, with full Python IntelliSense powered by Pyright LSP. Supports TS/JS/Python/Markdown/JSON with a file tree, tabs and cross-file navigation.",
+  "name": "@emtt/vue-monaco-ide",
+  "version": "0.2.0",
+  "description": "A zero-UI-framework Vue 3 code editor workbench built on Monaco Editor, with full Python IntelliSense powered by Pyright LSP. Supports TS/JS/Python/YAML/Markdown/JSON, binary/image/PDF preview, server hooks and a file tree with tabs and cross-file navigation.",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -14,6 +14,8 @@
     "python",
     "code-editor",
     "typescript",
+    "yaml",
+    "markdown-preview",
     "file-tree"
   ],
   "main": "./dist/vue-monaco-ide.js",
@@ -24,31 +26,47 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/vue-monaco-ide.js"
     },
+    "./yaml": {
+      "types": "./dist/types/subsets/yaml.d.ts",
+      "import": "./dist/vue-monaco-ide-yaml.js"
+    },
     "./style.css": "./dist/style.css"
   },
   "files": [
     "dist",
     "README.md",
+    "README.zh-CN.md",
     "LICENSE",
     "CHANGELOG.md"
   ],
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "./dist/vue-monaco-ide-yaml.js"
   ],
   "scripts": {
     "dev": "vite --config playground/vite.config.ts",
-    "build": "vite build && vue-tsc --project tsconfig.build.json --emitDeclarationOnly",
+    "build": "vite build && vue-tsc --project tsconfig.build.json --emitDeclarationOnly && node scripts/fix-declarations.mjs",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write src/ playground/",
-    "pack-check": "npm pack --dry-run"
+    "pack-check": "npm pack --dry-run",
+    "test": "vitest run",
+    "build:playground": "vite build --config playground/vite.config.ts",
+    "check": "pnpm lint && pnpm type-check && pnpm test && pnpm build && pnpm build:playground",
+    "prepack": "pnpm build"
   },
   "peerDependencies": {
-    "monaco-editor": ">=0.50.0 <0.53",
+    "monaco-editor": "~0.52.2",
     "monaco-pyright-lsp": ">=0.1.7 <0.2",
-    "vue": "^3.3.0"
+    "monaco-yaml": ">=5 <6",
+    "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "monaco-yaml": {
+      "optional": true
+    }
   },
   "dependencies": {
     "vscode-languageserver": "^9.0.1"
@@ -57,17 +75,21 @@
     "@tsconfig/node22": "^22.0.1",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "@vue/test-utils": "^2",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "^10.4.0",
-    "@vue/eslint-config-prettier": "^10.2.0",
-    "@vue/eslint-config-typescript": "^14.6.0",
+    "jsdom": "^26",
     "monaco-editor": "^0.52.2",
     "monaco-pyright-lsp": "^0.1.7",
+    "monaco-yaml": "^5.4.0",
     "npm-run-all2": "^7.0.2",
     "prettier": "3.5.3",
     "typescript": "~5.8.3",
     "vite": "^6.2.4",
+    "vitest": "^3",
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.8"
   },
@@ -79,12 +101,10 @@
       "esbuild"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TODO-OWNER/vue-monaco-ide.git"
+  "author": "hao503106@163.com",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
-  "bugs": {
-    "url": "https://github.com/TODO-OWNER/vue-monaco-ide/issues"
-  },
-  "homepage": "https://github.com/TODO-OWNER/vue-monaco-ide#readme"
+  "packageManager": "pnpm@10.7.1"
 }

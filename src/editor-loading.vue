@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t } from './i18n'
 import { IconLoading } from './icons'
 </script>
 
@@ -6,7 +7,7 @@ import { IconLoading } from './icons'
   <div class="vme-editor-loading">
     <div class="vme-editor-loading__inner">
       <IconLoading class="vme-icon-spin" :size="28" />
-      <span class="vme-editor-loading__text">编辑器初始化中...</span>
+      <span class="vme-editor-loading__text">{{ t('editorInitializing') }}</span>
     </div>
   </div>
 </template>

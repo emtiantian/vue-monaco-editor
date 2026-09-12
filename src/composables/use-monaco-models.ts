@@ -127,7 +127,8 @@ export function useMonacoModels(store: FileStore) {
     const restFiles: FileNode[] = []
 
     for (const file of files) {
-      if (file.isDirectory || !shouldPreCreateModel(file.language))
+      // 目录与非文本文件（图片/PDF/二进制）不进 Monaco，无需预建 model
+      if (file.isDirectory || (file.fileKind && file.fileKind !== 'text') || !shouldPreCreateModel(file.language))
         continue
 
       desiredPaths.add(file.path)

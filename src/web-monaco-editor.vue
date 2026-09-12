@@ -4,6 +4,7 @@ import type { FileNode, WebMonacoEditorEmits, WebMonacoEditorProps } from './typ
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useFileStore, useMonacoModels } from './composables'
 import EditorLoading from './editor-loading.vue'
+import { t } from './i18n'
 import { initializeWebCodeEditorThemes } from './themes'
 import {
   clearPythonMarkers,
@@ -16,6 +17,7 @@ import {
 } from './utils/monaco'
 import { ensureMonacoEnvironment, getWorkerLabelForLanguage } from './utils/monaco-environment'
 import { applyModelContentChanges } from './utils/text'
+import { tryActivateYaml } from './utils/yaml-gate'
 
 const props = withDefaults(defineProps<WebMonacoEditorProps>(), {
   theme: 'vs',
@@ -34,6 +36,8 @@ const editorContainer = ref<HTMLDivElement | null>(null)
 let editor: EditorType.IStandaloneCodeEditor | null = null
 let markerChangeDisposable: IDisposable | null = null
 let editorOpenerDisposable: IDisposable | null = null
+let pendingNavigation: { path: string, target: IRange | IPosition } | null = null
+let modelSwitchGeneration = 0
 let isFixingJsDiagnostics = false
 /** 记录最近一次修正 JS/TS trailing marker 的 model 版本，避免同版本反复改写 */
 let lastFixedMarkerVersion: { uri: string, versionId: number } | null = null
@@ -295,6 +299,7 @@ onMounted(async () => {
         // 统一切换 model（不在此时同步 setModel，避免与 watch 的异步 setModel 产生时序冲突）。
         // definition 的 uri 已由 mapLspUriToMonacoUri 映射为 model 原始 uri，getModel 可直接命中。
         if (targetPath && targetPath !== currentPath && store.findNodeByPath(targetPath)) {
+          pendingNavigation = selectionOrPosition ? { path: targetPath, target: selectionOrPosition } : null
           emit('open-file', targetPath)
           return true
         }
@@ -328,6 +333,13 @@ onMounted(async () => {
       // 增量同步：用 e.changes 计算新内容，避免每次 getValue() 全量取文本
       currentEditorContent = applyModelContentChanges(currentEditorContent, e.changes)
       updateContent(activeFile.value.path, currentEditorContent)
+      // 直接在内容变化源头 emit（等长替换如 x->y 同样触发；web-code-editor 侧按 path 去重）
+      emit('change', {
+        path: activeFile.value.path,
+        content: currentEditorContent,
+        name: activeFile.value.name,
+        isDirty: currentEditorContent !== activeFile.value.originalContent,
+      })
     })
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
@@ -357,6 +369,8 @@ onMounted(async () => {
 
 onUnmounted(() => {
   isComponentMounted = false
+  modelSwitchGeneration++
+  pendingNavigation = null
 
   stopPythonPreloadWatch?.()
 
@@ -478,14 +492,28 @@ async function attachLanguageSupport(file: FileNode, model: EditorType.ITextMode
       )
     })
   }
+  else if (langId === 'yaml') {
+    // fire-and-forget：monaco-yaml 为可选 peer（需引入子入口 vue-monaco-ide/yaml），
+    // 未引入/失败时返回 false，yaml 仍保留 Monaco 内置基础高亮
+    void tryActivateYaml()
+  }
 }
 
 async function updateEditorModel() {
+  const generation = ++modelSwitchGeneration
   if (!editor)
     return
 
   const file = activeFile.value
+  if (pendingNavigation && pendingNavigation.path !== file?.path)
+    pendingNavigation = null
   if (!file) {
+    editor.setModel(null)
+    return
+  }
+
+  // 非文本文件（图片/PDF/二进制）不进 Monaco，置空 model，由外层渲染分支展示预览/占位
+  if (file.fileKind && file.fileKind !== 'text') {
     editor.setModel(null)
     return
   }
@@ -494,15 +522,31 @@ async function updateEditorModel() {
   currentEditorContent = file.content
 
   const model = await resolveModelForFile(file)
+  if (!editor || generation !== modelSwitchGeneration || activeFile.value !== file)
+    return
 
   // 切到新 model 时，确保内容等于 store 中的最新值
   syncModelContent(model, file.content)
   currentEditorContent = file.content
 
   editor.setModel(model)
+  if (pendingNavigation?.path === file.path) {
+    const { target } = pendingNavigation
+    pendingNavigation = null
+    if ('startLineNumber' in target) {
+      editor.setSelection(target)
+      editor.revealRangeInCenter(target)
+    }
+    else {
+      editor.setPosition(target)
+      editor.revealPositionInCenter(target)
+    }
+  }
 
   // 按需初始化语言服务、补全与语义高亮
   await attachLanguageSupport(file, model)
+  if (!editor || generation !== modelSwitchGeneration)
+    return
 
   // 修正 JS/TS 文件末尾的 zero-width 错误 marker
   setTimeout(() => {
@@ -521,7 +565,7 @@ async function updateEditorModel() {
     <EditorLoading v-if="showLoading" />
     <div v-if="pythonLspAnalyzing" class="vme-monaco__lsp-hint">
       <span class="vme-monaco__lsp-spinner" />
-      <span>Python LSP 分析中...</span>
+      <span>{{ t('pythonLspAnalyzing') }}</span>
     </div>
   </div>
 </template>
