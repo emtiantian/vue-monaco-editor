@@ -345,6 +345,7 @@ interface FileInput {
 | `refresh` | - | 点击文件树刷新按钮 |
 | `ready` | `{ elapsedMs?: number }` | 编辑器初始化完成、可交互 |
 | `worker-error` | `{ type: 'python' \| 'typescript', error }` | worker 预加载失败（非致命） |
+| `operation-error` | `{ operation, path?, targetPath?, message?, code?, cause? }` | 服务端钩子拒绝或失败，本地状态不会改变 |
 | `download` | `{ path, name, remoteUrl? }` | 非文本文件点击下载按钮（由页面层决定下载方式） |
 
 ### Slots

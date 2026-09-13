@@ -128,16 +128,19 @@ export interface WebCodeEditorProps {
  */
 export interface WebCodeEditorServerHooks {
   /** 新建文件（parentPath 为目标父目录路径） */
-  createFile?: (payload: { parentPath: string, name: string }) => Promise<boolean>
+  createFile?: (payload: { parentPath: string, name: string }) => Promise<ServerOperationResult>
   /** 新建目录 */
-  createDirectory?: (payload: { parentPath: string, name: string }) => Promise<boolean>
+  createDirectory?: (payload: { parentPath: string, name: string }) => Promise<ServerOperationResult>
   /** 重命名（文件与目录；目录会同步影响子孙路径） */
-  rename?: (payload: { path: string, newName: string, isDirectory: boolean }) => Promise<boolean>
+  rename?: (payload: { path: string, newName: string, isDirectory: boolean }) => Promise<ServerOperationResult>
   /** 删除（文件与目录；目录删除会级联子孙） */
-  remove?: (payload: { path: string, isDirectory: boolean }) => Promise<boolean>
+  remove?: (payload: { path: string, isDirectory: boolean }) => Promise<ServerOperationResult>
   /** 移动到目标目录（拖拽落入库内/跨目录排序） */
-  move?: (payload: { sourcePath: string, targetFolderPath: string, isDirectory: boolean }) => Promise<boolean>
+  move?: (payload: { sourcePath: string, targetFolderPath: string, isDirectory: boolean }) => Promise<ServerOperationResult>
 }
+
+export type ServerOperationResult = boolean | { ok: boolean, message?: string, code?: string, cause?: unknown }
+export interface OperationErrorPayload { operation: 'create-file' | 'create-directory' | 'rename' | 'remove' | 'move', path?: string, targetPath?: string, message?: string, code?: string, cause?: unknown }
 
 /**
  * web-code-editor.vue 通过 defineExpose 暴露给父组件的实例方法
@@ -181,6 +184,7 @@ export interface WebCodeEditorEmits {
   (e: 'close-file', path: string): void
   /** 点击不可预览文件的"下载文件"按钮时触发，由页面层决定下载方式 */
   (e: 'download', payload: { path: string, name: string, remoteUrl?: string }): void
+  (e: 'operation-error', payload: OperationErrorPayload): void
   /** 编辑器初始化完成、可交互（Python LSP 可能仍在后台预加载） */
   (e: 'ready', payload: { elapsedMs?: number }): void
   /** worker 预加载失败（非致命） */

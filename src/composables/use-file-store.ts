@@ -8,6 +8,8 @@ import type {
   InitFilesOptions,
   OpenTab,
   WebCodeEditorServerHooks,
+  OperationErrorPayload,
+  ServerOperationResult,
 } from '../types'
 import { computed, inject, provide, reactive } from 'vue'
 import { confirm as feedbackConfirm, toast } from '../feedback'
@@ -23,9 +25,9 @@ export const FileStoreKey: InjectionKey<FileStore> = Symbol('file-store')
  * 钩子内部负责错误提示，这里只决定本地变更是否生效。
  */
 async function runServerHook<T>(
-  hook: ((payload: T) => Promise<boolean>) | undefined,
+  hook: ((payload: T) => Promise<ServerOperationResult>) | undefined,
   payload: T,
-): Promise<boolean> {
+): Promise<ServerOperationResult> {
   if (!hook)
     return true
   try {
@@ -34,6 +36,9 @@ async function runServerHook<T>(
   catch {
     return false
   }
+}
+function isAllowed(result: ServerOperationResult): boolean {
+  return typeof result === 'boolean' ? result : result.ok
 }
 
 /** 操作互斥锁：同一 key 在途时静默忽略第二次触发（防双击/连拖产生噪音）。
@@ -53,7 +58,7 @@ function createOpLock() {
   }
 }
 
-export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileStore {
+export function createFileStore(serverHooks?: WebCodeEditorServerHooks, onOperationError?: (error: OperationErrorPayload) => void): FileStore {
   const withOpLock = createOpLock()
 
   const state = reactive<FileStoreState>({
@@ -280,8 +285,10 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
         isDirectory ? serverHooks?.createDirectory : serverHooks?.createFile,
         { parentPath, name },
       )
-      if (!allowed)
+      if (!isAllowed(allowed)) {
+        onOperationError?.({ operation: isDirectory ? 'create-directory' : 'create-file', message: typeof allowed === 'object' ? allowed.message : undefined, code: typeof allowed === 'object' ? allowed.code : undefined, cause: typeof allowed === 'object' ? allowed.cause : undefined })
         return false
+      }
       const success = isDirectory
         ? createDirectory(parentPath, name)
         : createFile(parentPath, name)
@@ -364,8 +371,10 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
 
       // 服务端模式下先等重命名接口成功，失败则本地不变
       const allowed = await runServerHook(serverHooks?.rename, { path, newName, isDirectory: isDir })
-      if (!allowed)
+      if (!isAllowed(allowed)) {
+        onOperationError?.({ operation: 'rename', path, targetPath: newPath, message: typeof allowed === 'object' ? allowed.message : undefined, code: typeof allowed === 'object' ? allowed.code : undefined, cause: typeof allowed === 'object' ? allowed.cause : undefined })
         return false
+      }
 
       relocatePathInStore(oldPath, newPath, isDir)
       if (isDir) {
@@ -405,8 +414,10 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
 
       // 服务端模式下先等删除接口成功
       const allowed = await runServerHook(serverHooks?.remove, { path, isDirectory: file.isDirectory })
-      if (!allowed)
+      if (!isAllowed(allowed)) {
+        onOperationError?.({ operation: 'remove', path, message: typeof allowed === 'object' ? allowed.message : undefined, code: typeof allowed === 'object' ? allowed.code : undefined, cause: typeof allowed === 'object' ? allowed.cause : undefined })
         return
+      }
 
       const pathsToDelete = file.isDirectory
         ? state.files
@@ -467,8 +478,10 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
 
       // 服务端模式下先等移动接口成功
       const allowed = await runServerHook(serverHooks?.move, { sourcePath, targetFolderPath, isDirectory: source.isDirectory })
-      if (!allowed)
+      if (!isAllowed(allowed)) {
+        onOperationError?.({ operation: 'move', path: sourcePath, targetPath: targetFolderPath, message: typeof allowed === 'object' ? allowed.message : undefined, code: typeof allowed === 'object' ? allowed.code : undefined, cause: typeof allowed === 'object' ? allowed.cause : undefined })
         return
+      }
 
       relocatePathInStore(sourcePath, newPath, source.isDirectory)
 
@@ -528,8 +541,10 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
         }
         // 服务端模式下先等移动接口成功
         const allowed = await runServerHook(serverHooks?.move, { sourcePath, targetFolderPath: targetParent, isDirectory: source.isDirectory })
-        if (!allowed)
+        if (!isAllowed(allowed)) {
+          onOperationError?.({ operation: 'move', path: sourcePath, targetPath: targetParent, message: typeof allowed === 'object' ? allowed.message : undefined, code: typeof allowed === 'object' ? allowed.code : undefined, cause: typeof allowed === 'object' ? allowed.cause : undefined })
           return
+        }
         relocatePathInStore(sourcePath, newPath, source.isDirectory)
       })
     }

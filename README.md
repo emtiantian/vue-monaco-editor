@@ -129,6 +129,7 @@ interface FileInput {
 | `publish`, `refresh` | None |
 | `ready` | `{ elapsedMs?: number }` |
 | `worker-error` | `{ type: 'python' \| 'typescript', error }` |
+| `operation-error` | `{ operation, path?, targetPath?, message?, code?, cause? }` | A server hook rejected or failed; local state is unchanged |
 | `download` | `{ path, name, remoteUrl? }` |
 
 The `preview` slot receives `{ file, content }` for Markdown. It takes precedence over the built-in renderer:
