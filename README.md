@@ -50,6 +50,8 @@ The CSS import is required. Alternatively, register the default plugin with `app
 
 The default setup loads workers from jsDelivr. For production or restricted networks, provide bundled workers or URLs to hosted worker bundles:
 
+JavaScript, TypeScript, JSON, Markdown, Python, CSS and HTML are included as the default language set. Other languages are loaded when a matching file is opened.
+
 ```ts
 import EditorPlugin from '@emtt/vue-monaco-ide'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'

@@ -1,7 +1,7 @@
 /**
  * YAML 语言服务注册模块。
- * 主入口默认加载；`@emtt/vue-monaco-ide/yaml` 子入口为旧用法保留。
- * 实际语言服务在首次打开 YAML 文件时动态加载，避免阻塞初始编辑器渲染。
+ * 主入口注册激活器；实际语言服务仅在首次打开 YAML 文件时动态加载，
+ * 避免没有 YAML 文件的项目承担初始化开销。`/yaml` 子入口为旧用法保留。
  */
 import { monaco } from '../utils/monaco'
 import { ensureMonacoEnvironment, getYamlSchemas } from '../utils/monaco-environment'

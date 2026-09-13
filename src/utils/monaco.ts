@@ -1,7 +1,7 @@
 /**
  * Monaco Editor 按需加载配置
  *
- * 常驻语言：javascript / typescript / python / json / markdown
+ * 常驻语言：javascript / typescript / python / json / markdown / css / html
  * 其他语言：打开对应文件时动态 import 注册
  */
 
@@ -22,6 +22,8 @@ import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution.
 import 'monaco-editor/esm/vs/basic-languages/python/python.contribution.js'
 
 import 'monaco-editor/esm/vs/basic-languages/markdown/markdown.contribution.js'
+import 'monaco-editor/esm/vs/basic-languages/css/css.contribution.js'
+import 'monaco-editor/esm/vs/basic-languages/html/html.contribution.js'
 
 // TypeScript / JavaScript 语言服务（提供 IntelliSense）
 import 'monaco-editor/esm/vs/language/typescript/monaco.contribution.js'
@@ -46,6 +48,8 @@ const registeredLanguages = new Set<string>([
   'python',
   'json',
   'markdown',
+  'css',
+  'html',
 ])
 
 /**

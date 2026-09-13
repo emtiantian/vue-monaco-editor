@@ -493,8 +493,8 @@ async function attachLanguageSupport(file: FileNode, model: EditorType.ITextMode
     })
   }
   else if (langId === 'yaml') {
-    // fire-and-forget：monaco-yaml 为可选 peer（需引入子入口 vue-monaco-ide/yaml），
-    // 未引入/失败时返回 false，yaml 仍保留 Monaco 内置基础高亮
+    // fire-and-forget：仅在首次打开 YAML 文件时初始化 YAML schema/补全服务，
+    // 初始化失败时仍保留 Monaco 内置基础高亮。
     void tryActivateYaml()
   }
 }

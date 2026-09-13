@@ -249,6 +249,8 @@ Monaco 与 Pyright 的语言服务都运行在 Web Worker 中，worker 脚本的
 
 ### 1. 默认：CDN（零配置）
 
+默认语言集合包括 JavaScript、TypeScript、JSON、Markdown、Python、CSS 和 HTML；其他语言会在打开对应文件时动态加载。
+
 不做任何配置时，worker 从 jsDelivr CDN 加载，版本自动 pin 到你安装的 `monaco-editor` / `monaco-pyright-lsp` 版本（构建时从各自 package.json 读取并写入产物）。跨域 worker 已内部处理（blob URL 中转 + 模块 import）。
 
 > 注意：默认方案需要用户能访问 `cdn.jsdelivr.net`（内网环境请用方案 2/3）。
