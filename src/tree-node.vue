@@ -7,13 +7,13 @@ import { useFileStore } from './composables/use-file-store'
 import ContextMenu from './context-menu.vue'
 import CreateNodeInput from './create-node-input.vue'
 import FileIcon from './file-icon.vue'
-import { downloadFile, downloadUrl } from './utils/download'
 import { getParentPath } from './utils/path'
 
 const props = defineProps<{
   node: FileNode
   depth?: number
 }>()
+const emit = defineEmits<{ (e: 'download', payload: { path: string, name: string, remoteUrl?: string }): void }>()
 
 const {
   openFile,
@@ -264,15 +264,12 @@ function handleCopyPath() {
   navigator.clipboard.writeText(props.node.path)
 }
 
-async function handleDownload() {
+function handleDownload() {
   if (props.node.isDirectory) {
     // TODO: 文件夹下载由后端接口提供（含非文本文件），前端 store 仅持有文本文件无法完整打包
     return
   }
-  if (props.node.remoteUrl)
-    await downloadUrl(props.node.name, props.node.remoteUrl)
-  else
-    downloadFile(props.node.name, props.node.content)
+  emit('download', { path: props.node.path, name: props.node.name, remoteUrl: props.node.remoteUrl })
 }
 
 const contextMenuItems = computed(() => [

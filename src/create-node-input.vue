@@ -22,7 +22,10 @@ onMounted(async () => {
 })
 
 function handleKeydown(e: KeyboardEvent) {
+  if (e.isComposing || e.keyCode === 229)
+    return
   if (e.key === 'Enter') {
+    e.preventDefault()
     confirm()
   }
   else if (e.key === 'Escape') {

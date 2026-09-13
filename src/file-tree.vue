@@ -12,6 +12,7 @@ import { getParentPath } from './utils/path'
 
 const emit = defineEmits<{
   (e: 'refresh'): void
+  (e: 'download', payload: { path: string, name: string, remoteUrl?: string }): void
 }>()
 
 const {
@@ -112,7 +113,7 @@ const contextMenuItems = computed(() => [
         @cancel="cancelCreate"
       />
       <ul v-if="filteredTree.length > 0" class="vme-file-tree__list">
-        <TreeNode v-for="node in filteredTree" :key="node.path" :node="node" :depth="0" />
+        <TreeNode v-for="node in filteredTree" :key="node.path" :node="node" :depth="0" @download="emit('download', $event)" />
       </ul>
       <div v-else-if="!isCreatingAtRootLevel" class="vme-file-tree__empty">
         {{ t('noMatchingFiles') }}
