@@ -155,6 +155,7 @@ features:
 ]
 
 const lastEvent = ref('')
+const showIntro = ref(true)
 const editorRef = useTemplateRef('editor')
 
 function log(event: string) {
@@ -211,10 +212,7 @@ const serverHooks: WebCodeEditorServerHooks = {
 <template>
   <div class="page">
     <div class="page__toolbar">
-      <span>
-        vue-monaco-ide playground（worker 默认走 CDN，首次打开 Python 文件会加载 Pyright ~25MB；
-        文件名含 fail 触发 serverHooks 失败路径）
-      </span>
+      <span>vue-monaco-ide playground</span>
       <span class="page__event">{{ lastEvent }}</span>
     </div>
     <div class="page__editor">
@@ -234,6 +232,18 @@ const serverHooks: WebCodeEditorServerHooks = {
         @worker-error="log(`worker-error: ${$event.type}`)"
       />
     </div>
+  </div>
+  <div v-if="showIntro" class="intro-backdrop">
+    <section class="intro-modal" role="dialog" aria-modal="true">
+      <h2>开始使用前说明</h2>
+      <p>这是功能演示页面：</p>
+      <ul>
+        <li><strong>Worker：</strong>默认从 CDN 加载；首次打开 Python 文件会加载约 25MB 的 Pyright。正式项目可用 <code>configureWorkers</code> 配置本地 Worker。</li>
+        <li><strong>serverHooks：</strong>操作会模拟 300ms 服务端请求。名称或路径最后一段包含 <code>fail</code> 时会故意返回失败，文件树不会执行操作；这不是组件限制。</li>
+        <li><strong>下载：</strong>组件只发出下载事件，实际下载由调用方实现。</li>
+      </ul>
+      <button type="button" class="intro-modal__close" @click="showIntro = false">知道了，开始体验</button>
+    </section>
   </div>
 </template>
 
@@ -262,4 +272,10 @@ const serverHooks: WebCodeEditorServerHooks = {
   flex: 1;
   min-height: 0;
 }
+.intro-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: #1118; }
+.intro-modal { width: min(620px, 100%); box-sizing: border-box; padding: 24px; border-radius: 12px; background: #fff; color: #333; box-shadow: 0 20px 60px #0003; }
+.intro-modal h2 { margin: 0 0 12px; font-size: 20px; }
+.intro-modal li { margin: 9px 0; line-height: 1.55; }
+.intro-modal code { padding: 1px 4px; border-radius: 3px; background: #f1f3f5; }
+.intro-modal__close { margin-top: 10px; padding: 8px 16px; border: 0; border-radius: 6px; color: #fff; background: #1677ff; cursor: pointer; }
 </style>
