@@ -9,6 +9,8 @@
 
 ### npm release preparation
 
+- Add a manual Save button and make save requests caller-confirmed: `save`/`save-all` no longer clear dirty state before persistence; call `markFileSaved` after successful persistence (`setFileContent` remains compatible).
+
 - Prepare `@emtt/vue-monaco-ide@0.2.0` as an unpublished candidate; previous dated sections describe development milestones, not verified npm releases.
 - Add English/Chinese documentation, manual release configuration and regression tests.
 - Fix reactive locale/message updates and preserve the YAML registration entry during tree shaking.

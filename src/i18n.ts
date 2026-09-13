@@ -43,6 +43,8 @@ export interface Messages {
   unsaved: string
   /** 页签栏发布按钮默认文字 */
   publish: string
+  /** 手动保存按钮 */
+  save: string
   /** Markdown 预览切换按钮 title */
   preview: string
   /** Markdown 编辑切换按钮 title */
@@ -96,6 +98,7 @@ const zhCN: Messages = {
   saved: '已保存',
   unsaved: '未保存',
   publish: '发布',
+  save: '保存',
   preview: '预览',
   edit: '编辑',
   selectFileToEdit: '选择文件进行编辑',
@@ -132,6 +135,7 @@ const enUS: Messages = {
   saved: 'Saved',
   unsaved: 'Unsaved',
   publish: 'Publish',
+  save: 'Save',
   preview: 'Preview',
   edit: 'Edit',
   selectFileToEdit: 'Select a file to edit',

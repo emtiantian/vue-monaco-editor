@@ -141,9 +141,9 @@ export interface WebCodeEditorServerHooks {
  * web-code-editor.vue 通过 defineExpose 暴露给父组件的实例方法
  */
 export interface WebCodeEditorInstance {
-  /** 保存当前活动文件 */
+  /** 请求保存当前活动文件；调用方保存成功后调用 markFileSaved */
   save: () => void
-  /** 保存全部文件 */
+  /** 请求保存全部文件；调用方保存成功后调用 markFileSaved */
   saveAll: () => void
   /** 打开指定路径文件 */
   openFile: (path: string) => void
@@ -155,6 +155,8 @@ export interface WebCodeEditorInstance {
   getFiles: () => FileInput[]
   /** 外部写入文件内容并标记为已保存（如 revision 冲突时采用远端内容） */
   setFileContent: (path: string, content: string) => void
+  /** 确认调用方已成功持久化文件内容，并清除 dirty 状态 */
+  markFileSaved: (path: string, content: string) => void
 }
 
 /**

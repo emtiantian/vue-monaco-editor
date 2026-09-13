@@ -367,6 +367,8 @@ editorRef.value.getActiveFile()      // 当前活动 FileNode
 editorRef.value.getFiles()           // 全部文件（含未保存内容与 fileKind/remoteUrl/isDirectory）
 editorRef.value.setFileContent(path, content)
 // 外部写入内容并标记为已保存（如 revision 冲突时采用远端内容）
+editorRef.value.markFileSaved(path, content)
+// 调用方持久化成功后确认保存；save/save-all 事件不会提前清除未保存状态
 ```
 
 ## 插件 API

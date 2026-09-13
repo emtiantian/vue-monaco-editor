@@ -15,6 +15,8 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
+  /** 点击手动保存按钮时触发 */
+  (e: 'save'): void
   /** 点击发布按钮时触发 */
   (e: 'publish'): void
 }>()
@@ -99,13 +101,16 @@ watch(() => state.activePath, scrollToActiveTab, { immediate: true })
         </button>
       </div>
     </div>
-    <!-- 右侧：草稿状态 + 发布 -->
+    <!-- 右侧：草稿状态 + 保存 + 发布 -->
     <div class="vme-tab-bar__side">
       <span v-if="draftStatus" class="vme-draft" :class="`vme-draft--${draftStatus}`">
         <span class="vme-draft__dot" />
         <span>{{ saveStatusText }}</span>
         <span v-if="draftStatus === 'saved' && saveTime" class="vme-draft__time">{{ saveTime }}</span>
       </span>
+      <button type="button" class="vme-save-btn" :disabled="!isDirty" @click="emit('save')">
+        {{ t('save') }}
+      </button>
       <button type="button" class="vme-publish-btn" @click="emit('publish')">
         {{ publishTextResolved }}
       </button>
@@ -245,6 +250,21 @@ watch(() => state.activePath, scrollToActiveTab, { immediate: true })
   font-size: 13px;
   cursor: pointer;
   transition: opacity 0.15s;
+}
+
+.vme-save-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--vme-border, #d9d9d9);
+  border-radius: 4px;
+  background: var(--vme-bg, #fff);
+  color: var(--vme-text, #333);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.vme-save-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 .vme-publish-btn:hover {

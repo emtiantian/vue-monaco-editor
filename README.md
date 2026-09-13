@@ -142,7 +142,7 @@ The `preview` slot receives `{ file, content }` for Markdown. It takes precedenc
 </VueMonacoEditor>
 ```
 
-The component ref exposes `save()`, `saveAll()`, `openFile(path)`, `closeFile(path)`, `getActiveFile()`, `getFiles()` and `setFileContent(path, content)`. `setFileContent` also marks the new contents saved. Ctrl/Cmd+S saves the active file; Ctrl/Cmd+Shift+S saves all dirty files.
+The component ref exposes `save()`, `saveAll()`, `openFile(path)`, `closeFile(path)`, `getActiveFile()`, `getFiles()`, `setFileContent(path, content)` and `markFileSaved(path, content)`. Save requests emit `save`/`save-all` and leave dirty state unchanged; after persistence succeeds, call `markFileSaved` (or compatible `setFileContent`) to confirm it. Ctrl/Cmd+S and the manual Save button request the active file; Ctrl/Cmd+Shift+S requests all dirty files.
 
 ## Server integration
 
