@@ -156,10 +156,20 @@ features:
 
 const lastEvent = ref('')
 const showIntro = ref(true)
+const downloadNotice = ref('')
+let downloadNoticeTimer: ReturnType<typeof setTimeout> | undefined
 const editorRef = useTemplateRef('editor')
 
 function log(event: string) {
   lastEvent.value = `${new Date().toLocaleTimeString()} ${event}`
+}
+
+function handleDownload(payload: { path: string, name: string }) {
+  log(`download requested: ${payload.path}`)
+  downloadNotice.value = `已触发下载事件：${payload.name}（${payload.path}）。实际下载由调用方实现。`
+  if (downloadNoticeTimer)
+    clearTimeout(downloadNoticeTimer)
+  downloadNoticeTimer = setTimeout(() => { downloadNotice.value = '' }, 4500)
 }
 
 async function handleSave(payload: { path: string, content: string, name: string }) {
@@ -215,6 +225,7 @@ const serverHooks: WebCodeEditorServerHooks = {
       <span>vue-monaco-ide playground</span>
       <span class="page__event">{{ lastEvent }}</span>
     </div>
+    <div v-if="downloadNotice" class="download-notice" role="status">{{ downloadNotice }}</div>
     <div class="page__editor">
       <VueMonacoEditor
         ref="editor"
@@ -228,7 +239,7 @@ const serverHooks: WebCodeEditorServerHooks = {
         @save="handleSave"
         @save-all="handleSaveAll"
         @change="log(`change: ${$event.path}`)"
-        @download="log(`download: ${$event.path}`)"
+        @download="handleDownload"
         @worker-error="log(`worker-error: ${$event.type}`)"
       />
     </div>
@@ -267,6 +278,7 @@ const serverHooks: WebCodeEditorServerHooks = {
 .page__event {
   color: #1677ff;
 }
+.download-notice { position: fixed; top: 42px; right: 16px; z-index: 10; max-width: min(420px, calc(100vw - 32px)); padding: 10px 14px; border: 1px solid #91caff; border-radius: 6px; color: #0958d9; background: #e6f4ff; box-shadow: 0 4px 14px #0002; font-size: 13px; }
 
 .page__editor {
   flex: 1;
