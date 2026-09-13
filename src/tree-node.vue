@@ -297,7 +297,7 @@ const contextMenuItems = computed(() => [
       }"
       :style="indentStyle"
       :draggable="!isRenaming"
-      @click="handleClick"
+      @click.stop="handleClick"
       @contextmenu="handleContextMenu"
       @dragstart="onDragStart"
       @dragover="onDragOver"
