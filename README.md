@@ -164,7 +164,7 @@ Locale and overrides are shared by instances using the same package module. CSS 
 
 ## Utilities and limitations
 
-Exports include file-kind detection (`resolveFileKind`, `getFileKindByFilename`, `looksLikeBinaryContent`, `normalizeFileKind`), path helpers (`buildPath`, `getParentPath`, `getExtension`, `getPathDepth`, `MAX_PATH_DEPTH`), download helpers (`downloadFile`, `downloadBase64File`), language mapping (`MONACO_LANGUAGE_MAP`, `getLanguageByFilename`), `renderMarkdownToHtml`, and YAML activation helpers (`tryActivateYaml`, `setYamlActivator`). Public types include `FileInput`, `FileNode`, `WebCodeEditorServerHooks`, `ConfigureWorkersOptions`, `VueMonacoEditorPluginOptions`, `Locale` and `Messages`.
+The root export contains the editor, configuration helpers and public types. File-kind, path, language and Markdown helpers remain available from their documented source modules.
 
 The built-in Markdown preview supports headings, fenced code, lists, blockquotes, inline formatting and tables. It escapes HTML and restricts URL schemes. Raw HTML, indented code blocks, task lists, footnotes and math are not supported; use the preview slot for a different renderer. Large multi-file projects may consume substantial browser memory. Vite currently reports a large Monaco chunk and mixed static/dynamic language imports; this package does not guarantee that every unused language registration is removed. Each workbench has one editor area.
 

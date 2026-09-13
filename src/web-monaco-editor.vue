@@ -22,6 +22,7 @@ import { tryActivateYaml } from './utils/yaml-gate'
 const props = withDefaults(defineProps<WebMonacoEditorProps>(), {
   theme: 'vs',
   loading: false,
+  preloadLanguages: () => [],
 })
 
 const emit = defineEmits<WebMonacoEditorEmits>()
@@ -57,6 +58,14 @@ let isComponentMounted = false
 let readyEmitted = false
 
 const { ensureModel, startWatching } = useMonacoModels(store)
+
+// 调用方可为非默认语言提前加载语法支持；失败不阻塞编辑器启动。
+watch(() => props.preloadLanguages, (languages) => {
+  languages.forEach((language) => {
+    const value = language.replace(/^\./, '')
+    void ensureLanguageLoaded(normalizeLanguageId(value))
+  })
+}, { immediate: true })
 
 let pythonLspModule: typeof import('./webworker/python-lsp') | null = null
 let pythonLspInitError: unknown = null

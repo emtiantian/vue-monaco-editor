@@ -116,6 +116,8 @@ export interface WebCodeEditorProps {
   mediaPreview?: boolean
   /** 无 #preview 插槽时是否启用内置轻量 Markdown 渲染器（默认 false） */
   builtinMarkdownPreview?: boolean
+  /** 提前加载的非默认语言（可传语言名或文件后缀，如 ['rust', '.go']） */
+  preloadLanguages?: string[]
 }
 
 /**
@@ -277,6 +279,7 @@ export interface MenuItem {
 export interface WebMonacoEditorProps {
   theme?: WebCodeEditorTheme
   loading?: boolean
+  preloadLanguages?: string[]
 }
 
 /**

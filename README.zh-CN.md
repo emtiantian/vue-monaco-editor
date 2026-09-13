@@ -391,10 +391,8 @@ import {
   // —— 工具函数（宿主可直接复用）——
   resolveFileKind, getFileKindByFilename, looksLikeBinaryContent, normalizeFileKind,
   buildPath, getParentPath, getExtension, getPathDepth, MAX_PATH_DEPTH,
-  downloadFile, downloadBase64File,
   MONACO_LANGUAGE_MAP, getLanguageByFilename,
   renderMarkdownToHtml,   // 内置 Markdown 渲染器（白名单重建，防 XSS）
-  tryActivateYaml, setYamlActivator,
 } from '@emtt/vue-monaco-ide'
 ```
 
