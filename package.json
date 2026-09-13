@@ -61,15 +61,10 @@
   "peerDependencies": {
     "monaco-editor": "~0.52.2",
     "monaco-pyright-lsp": ">=0.1.7 <0.2",
-    "monaco-yaml": ">=5 <6",
     "vue": "^3.5.0"
   },
-  "peerDependenciesMeta": {
-    "monaco-yaml": {
-      "optional": true
-    }
-  },
   "dependencies": {
+    "monaco-yaml": "^5.5.1",
     "vscode-languageserver": "^9.0.1"
   },
   "devDependencies": {
@@ -85,7 +80,6 @@
     "jsdom": "^26",
     "monaco-editor": "^0.52.2",
     "monaco-pyright-lsp": "^0.1.7",
-    "monaco-yaml": "^5.4.0",
     "npm-run-all2": "^7.0.2",
     "prettier": "3.5.3",
     "typescript": "~5.8.3",
@@ -108,7 +102,12 @@
     "registry": "https://registry.npmjs.org/"
   },
   "packageManager": "pnpm@10.7.1",
-  "repository": { "type": "git", "url": "git+https://github.com/emtiantian/vue-monaco-editor.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emtiantian/vue-monaco-editor.git"
+  },
   "homepage": "https://emtiantian.github.io/vue-monaco-editor/",
-  "bugs": { "url": "https://github.com/emtiantian/vue-monaco-editor/issues" }
+  "bugs": {
+    "url": "https://github.com/emtiantian/vue-monaco-editor/issues"
+  }
 }

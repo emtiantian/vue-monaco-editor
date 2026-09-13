@@ -7,7 +7,7 @@ import { useFileStore } from './composables/use-file-store'
 import ContextMenu from './context-menu.vue'
 import CreateNodeInput from './create-node-input.vue'
 import FileIcon from './file-icon.vue'
-import { downloadFile } from './utils/download'
+import { downloadFile, downloadUrl } from './utils/download'
 import { getParentPath } from './utils/path'
 
 const props = defineProps<{
@@ -269,7 +269,10 @@ async function handleDownload() {
     // TODO: 文件夹下载由后端接口提供（含非文本文件），前端 store 仅持有文本文件无法完整打包
     return
   }
-  downloadFile(props.node.name, props.node.content)
+  if (props.node.remoteUrl)
+    await downloadUrl(props.node.name, props.node.remoteUrl)
+  else
+    downloadFile(props.node.name, props.node.content)
 }
 
 const contextMenuItems = computed(() => [

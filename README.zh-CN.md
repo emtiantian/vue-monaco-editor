@@ -44,7 +44,7 @@
   - 重命名（跨文件 WorkspaceEdit）
   - 实时类型检查与诊断（红色波浪线），带 typeshed 内置类型
 - ✅ **JSON**：内置 JSON 语言服务（格式化、schema 校验）
-- ✅ **YAML**：基础高亮开箱即用；引入可选子入口 [`@emtt/vue-monaco-ide/yaml`](#yaml-语言服务)后升级为完整语言服务（schema 校验、补全、悬停）
+- ✅ **YAML**：默认启用完整语言服务（schema 校验、补全、悬停），首次打开 YAML 文件时按需加载
 - ✅ **Markdown**：语法高亮 + 双通道预览——`#preview` 插槽接入任意渲染器，或开启内置零依赖轻量渲染器（见 [Markdown 预览](#markdown-预览)）
 - ✅ 支持 Monaco 的多种语言高亮；生产构建可能因静态依赖包含部分语言注册代码
 - ✅ F12 / Cmd+点击 跳转定义、Cmd+S 保存、Cmd+Shift+S 全部保存
@@ -88,7 +88,7 @@ npm install @emtt/vue-monaco-ide monaco-editor monaco-pyright-lsp
 
 要求：Vue `^3.5`，monaco-editor `~0.52.2`，monaco-pyright-lsp `0.1.x`。
 
-可选：需要 YAML 完整语言服务时再安装 `monaco-yaml@^5`（可选 peer，不装不影响其余功能，见 [yaml 语言服务](#yaml-语言服务)）。
+`monaco-yaml` 已作为包的运行依赖安装，无需调用方单独添加。
 
 ## 快速开始
 
@@ -222,15 +222,10 @@ const serverHooks: WebCodeEditorServerHooks = {
 
 ### yaml 语言服务
 
-YAML 基础高亮开箱即用（零配置）。需要 schema 校验、补全、悬停等完整语言服务时：
-
-```bash
-pnpm add monaco-yaml@^5   # 可选 peer
-```
+YAML 完整语言服务默认注册，首次打开 `.yml` / `.yaml` 文件时加载。需要 schema 校验时配置内联 schema：
 
 ```ts
-// main.ts —— 引入子入口（副作用导入），并在 configureWorkers 中按需配置 schema
-import '@emtt/vue-monaco-ide/yaml'
+// main.ts —— 主入口已注册 YAML，只需按需配置 schema
 import { configureWorkers } from '@emtt/vue-monaco-ide'
 
 configureWorkers({
@@ -246,7 +241,7 @@ configureWorkers({
 })
 ```
 
-worker 加载同样遵循下方三档策略：默认从 jsDelivr 的 `/+esm` 端点加载 `monaco-yaml@5.4.0` 的 worker；可用 `workerUrls.yaml` 指定本地产物；`workerUrls.yaml: false` 禁用专属 worker（回退 editor worker，仅失去语言服务，高亮不受影响）。未引入子入口时以上配置均不生效，yaml 保持基础高亮。
+worker 加载同样遵循下方三档策略：默认从 jsDelivr 的 `/+esm` 端点加载 YAML worker；可用 `workerUrls.yaml` 指定本地产物；`workerUrls.yaml: false` 禁用专属 worker（回退 editor worker，仅失去语言服务，高亮不受影响）。`@emtt/vue-monaco-ide/yaml` 子入口仅为旧用法保留。
 
 ## Worker 加载策略
 
@@ -446,7 +441,7 @@ setFeedbackProvider({
 | `vue` | peer | 组件框架（`^3.5`） |
 | `monaco-editor` | peer | 编辑器内核与 TS/JSON 语言服务（`~0.52.2`） |
 | `monaco-pyright-lsp` | peer | Pyright Web Worker 打包与 worker 协议（`0.1.x`） |
-| `monaco-yaml` | peer（可选） | YAML 完整语言服务（`^5`）；仅引入子入口 `@emtt/vue-monaco-ide/yaml` 时需要 |
+| `monaco-yaml` | dependency | 默认 YAML schema 校验、补全与悬停 |
 | `vscode-languageserver` | dependency | LSP JSON-RPC 协议实现（monaco-pyright-lsp 同款协议库，主线程与 worker 通信） |
 | `vite` / `vue-tsc` / `eslint` 等 | dev | 仅构建/校验期使用，**不进入运行时产物** |
 

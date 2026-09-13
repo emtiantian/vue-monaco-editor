@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      monaco-yaml:
+        specifier: ^5.5.1
+        version: 5.5.1(monaco-editor@0.52.2)
       vscode-languageserver:
         specifier: ^9.0.1
         version: 9.0.1
@@ -48,9 +51,6 @@ importers:
       monaco-pyright-lsp:
         specifier: ^0.1.7
         version: 0.1.7
-      monaco-yaml:
-        specifier: ^5.4.0
-        version: 5.5.1(monaco-editor@0.52.2)
       npm-run-all2:
         specifier: ^7.0.2
         version: 7.0.2

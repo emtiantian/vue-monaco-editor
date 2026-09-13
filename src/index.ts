@@ -17,6 +17,8 @@ import _WebCodeEditor from './web-code-editor.vue'
 import { setLocale } from './i18n'
 import { configureWorkers } from './utils/monaco-environment'
 import './styles/index.css'
+// YAML 校验与补全属于默认编辑器能力；/yaml 子入口继续保留用于向后兼容。
+import './subsets/yaml'
 
 export * from './types'
 export { setFeedbackProvider } from './feedback'
@@ -28,7 +30,7 @@ export type { Locale, Messages } from './i18n'
 // 工具函数公开：宿主可直接复用文件类型判定 / 路径处理 / 下载 / 语言映射
 export { normalizeFileKind, getFileKindByFilename, looksLikeBinaryContent, resolveFileKind } from './utils/file-kind'
 export { MAX_PATH_DEPTH, getPathDepth, getParentPath, buildPath, getExtension } from './utils/path'
-export { downloadFile, downloadBase64File } from './utils/download'
+export { downloadFile, downloadBase64File, downloadUrl } from './utils/download'
 export { MONACO_LANGUAGE_MAP, getLanguageByFilename } from './utils/language'
 export { renderMarkdownToHtml } from './utils/markdown'
 export { tryActivateYaml, setYamlActivator } from './utils/yaml-gate'

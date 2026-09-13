@@ -14,8 +14,6 @@ After publication:
 
 ```sh
 pnpm add @emtt/vue-monaco-ide vue@^3.5 monaco-editor@~0.52.2 monaco-pyright-lsp@^0.1.7
-# Optional: only required for the /yaml entry
-pnpm add monaco-yaml@^5
 ```
 
 Browser ESM only. Vue 3.5 is required by the generated declarations. Monaco 0.52.2 is the development baseline; older Monaco and Vue versions, SSR and CommonJS are not supported by this release contract. `vscode-languageserver` is installed as a runtime dependency. Development uses pnpm 10 and Node.js 22.
@@ -74,10 +72,9 @@ This example assumes an existing Vue `app` and Vite's `?worker` support. Copy `m
 
 `configureWorkers(options)` is also exported. Options include `workerUrls` for editor/typescript/json/css/html/yaml, `pyrightWorkerUrl`, `getWorker`, and `yamlSchemas`. Worker URLs must point to runnable bundles; copying a raw ESM entry alone may leave relative dependencies unresolved.
 
-## Optional YAML service
+## YAML service
 
 ```ts
-import '@emtt/vue-monaco-ide/yaml'
 import { configureWorkers } from '@emtt/vue-monaco-ide'
 
 configureWorkers({
@@ -89,7 +86,7 @@ configureWorkers({
 })
 ```
 
-The main entry works without `monaco-yaml`. The YAML entry registers a service activator and must remain a side-effect import. Schema fetching is disabled: supply schema contents inline. `workerUrls.yaml: false` disables the worker; syntax highlighting remains available.
+YAML validation, completion and hover are registered by the main entry and `monaco-yaml` is installed with the package. The `/yaml` entry remains available for compatibility but is no longer required. Schema fetching is disabled: supply schema contents inline. `workerUrls.yaml: false` disables the worker; syntax highlighting remains available.
 
 ## Component API
 

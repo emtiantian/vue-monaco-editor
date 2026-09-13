@@ -1,9 +1,8 @@
 /**
  * yaml 语言服务激活门。
  *
- * monaco-yaml 是可选 peer 依赖：主入口不引用它（否则未安装的宿主编译失败），
- * 由子入口 `vue-monaco-ide/yaml` 在被 import 时通过 setYamlActivator 注册激活器；
- * 编辑器侧打开 yaml 文件时经 tryActivateYaml 触发。全程零 monaco-yaml 静态依赖。
+ * 主入口注册激活器，编辑器首次打开 YAML 文件时经 tryActivateYaml 动态加载
+ * monaco-yaml。独立门函数让初始化保持幂等，并为 worker 失败提供基础高亮回退。
  */
 
 export type YamlActivator = () => Promise<boolean>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
-import Editor from '../src/web-code-editor.vue'
-import type { FileInput } from '../src/types'
+import { VueMonacoEditor as Editor } from '../src'
+import type { FileInput } from '../src'
 
 const lastEvent = ref('Ready')
 const editorRef = useTemplateRef('editor')
@@ -23,6 +23,18 @@ const files: FileInput[] = [
     name: 'README.md',
     language: 'markdown',
     content: '# Vue Monaco IDE\n\nTry Cmd/Ctrl-click on `add` to jump across files.',
+  },
+  {
+    path: '/assets/preview.png',
+    name: 'preview.png',
+    fileKind: 'image',
+    remoteUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="640" height="360" rx="24" fill="#6654d9"/><text x="320" y="190" text-anchor="middle" fill="white" font-family="system-ui" font-size="42">Image preview</text></svg>')}`,
+  },
+  {
+    path: '/assets/sample.pdf',
+    name: 'sample.pdf',
+    fileKind: 'pdf',
+    remoteUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
   },
 ]
 

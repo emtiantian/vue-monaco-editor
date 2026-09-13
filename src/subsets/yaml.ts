@@ -1,13 +1,7 @@
 /**
- * yaml 语言服务子入口（独立 chunk）。
- *
- * 为什么独立：本文件含 `import('monaco-yaml')` 字面量动态导入。若打进主入口，
- * 未安装 monaco-yaml（可选 peer）的宿主在构建时同样会解析该模块而报错；
- * 独立子入口后，只有显式 `import 'vue-monaco-ide/yaml'` 的宿主才需要安装它。
- *
- * 用法：
- *   import 'vue-monaco-ide/yaml'
- *   configureWorkers({ yamlSchemas: [{ fileMatch: '*.yml', schema: { ... } }] })
+ * YAML 语言服务注册模块。
+ * 主入口默认加载；`@emtt/vue-monaco-ide/yaml` 子入口为旧用法保留。
+ * 实际语言服务在首次打开 YAML 文件时动态加载，避免阻塞初始编辑器渲染。
  */
 import { monaco } from '../utils/monaco'
 import { ensureMonacoEnvironment, getYamlSchemas } from '../utils/monaco-environment'

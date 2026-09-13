@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import type { FileInput, WebCodeEditorServerHooks } from '../src/types'
+import type { FileInput, WebCodeEditorServerHooks } from '../src'
 import { ref, useTemplateRef } from 'vue'
-// yaml 语言服务子入口：引入后 .yml 获得完整语言服务（未引入时仅基础高亮）
-import '../src/subsets/yaml'
-import VueMonacoEditor from '../src/web-code-editor.vue'
+import { VueMonacoEditor } from '../src'
 
 const files: FileInput[] = [
   {
@@ -73,13 +71,13 @@ console.log(len(v))
   {
     path: '/assets/logo.png',
     name: 'logo.png',
-    remoteUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+    remoteUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><defs><linearGradient id="g"><stop stop-color="#6654d9"/><stop offset="1" stop-color="#1677ff"/></linearGradient></defs><rect width="640" height="360" rx="32" fill="url(#g)"/><text x="320" y="175" text-anchor="middle" fill="white" font-family="system-ui" font-size="44" font-weight="700">Vue Monaco IDE</text><text x="320" y="225" text-anchor="middle" fill="#e8ecff" font-family="system-ui" font-size="22">Image preview</text></svg>')}`,
   },
   {
     path: '/assets/spec.pdf',
     name: 'spec.pdf',
     fileKind: 'pdf',
-    remoteUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    remoteUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
   },
   {
     path: '/assets/lib.zip',
