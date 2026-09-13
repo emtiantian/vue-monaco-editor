@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import PlaygroundApp from '../playground/App.vue'
+</script>
+
+<template>
+  <PlaygroundApp />
+</template>
+<!-- Pages deliberately reuses the full playground so local and deployed demos stay identical. -->
+<!--
+<script setup lang="ts">
 import { ref, useTemplateRef } from 'vue'
 import { VueMonacoEditor as Editor } from '../src'
 import type { FileInput } from '../src'
@@ -99,4 +108,4 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 48px); letter-spacing: -.04em; }
 .intro-modal li { margin: 9px 0; line-height: 1.55; }
 .intro-modal code { padding: 1px 4px; border-radius: 3px; background: #f1f3f5; }
 .intro-modal__close { margin-top: 10px; padding: 8px 16px; border: 0; border-radius: 6px; color: #fff; background: #6654d9; cursor: pointer; }
-</style>
+</style> -->
