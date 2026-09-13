@@ -389,13 +389,10 @@ import {
   VueMonacoEditor,     // 主组件
   configureWorkers,    // worker 配置
   setFeedbackProvider, // 接管 toast / confirm 弹窗
-  // —— 工具函数（宿主可直接复用）——
-  resolveFileKind, getFileKindByFilename, looksLikeBinaryContent, normalizeFileKind,
-  buildPath, getParentPath, getExtension, getPathDepth, MAX_PATH_DEPTH,
-  MONACO_LANGUAGE_MAP, getLanguageByFilename,
-  renderMarkdownToHtml,   // 内置 Markdown 渲染器（白名单重建，防 XSS）
 } from '@emtt/vue-monaco-ide'
 ```
+
+工具函数通过独立子路径导入，例如 `@emtt/vue-monaco-ide/utils/file-kind`、`@emtt/vue-monaco-ide/utils/path`、`@emtt/vue-monaco-ide/utils/language` 和 `@emtt/vue-monaco-ide/utils/markdown`。
 
 ## 定制与扩展
 

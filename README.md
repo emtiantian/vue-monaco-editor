@@ -165,7 +165,7 @@ Locale and overrides are shared by instances using the same package module. CSS 
 
 ## Utilities and limitations
 
-The root export contains the editor, configuration helpers and public types. File-kind, path, language and Markdown helpers remain available from their documented source modules.
+The root export contains the editor, configuration helpers and public types. Import optional helpers from `@emtt/vue-monaco-ide/utils/file-kind`, `@emtt/vue-monaco-ide/utils/path`, `@emtt/vue-monaco-ide/utils/language`, or `@emtt/vue-monaco-ide/utils/markdown`.
 
 The built-in Markdown preview supports headings, fenced code, lists, blockquotes, inline formatting and tables. It escapes HTML and restricts URL schemes. Raw HTML, indented code blocks, task lists, footnotes and math are not supported; use the preview slot for a different renderer. Large multi-file projects may consume substantial browser memory. Vite currently reports a large Monaco chunk and mixed static/dynamic language imports; this package does not guarantee that every unused language registration is removed. Each workbench has one editor area.
 
