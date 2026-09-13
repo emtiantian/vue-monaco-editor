@@ -27,6 +27,22 @@
       "import": "./dist/vue-monaco-ide.js"
     },
     "./style.css": "./dist/style.css"
+    ,"./utils/file-kind": {
+      "types": "./dist/types/utils/file-kind.d.ts",
+      "import": "./dist/utils/file-kind.js"
+    },
+    "./utils/path": {
+      "types": "./dist/types/utils/path.d.ts",
+      "import": "./dist/utils/path.js"
+    },
+    "./utils/language": {
+      "types": "./dist/types/utils/language.d.ts",
+      "import": "./dist/utils/language.js"
+    },
+    "./utils/markdown": {
+      "types": "./dist/types/utils/markdown.d.ts",
+      "import": "./dist/utils/markdown.js"
+    }
   },
   "files": [
     "dist",

@@ -23,6 +23,10 @@ export default defineConfig({
     lib: {
       entry: {
         'vue-monaco-ide': fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+        'utils/file-kind': fileURLToPath(new URL('./src/utils/file-kind.ts', import.meta.url)),
+        'utils/path': fileURLToPath(new URL('./src/utils/path.ts', import.meta.url)),
+        'utils/language': fileURLToPath(new URL('./src/utils/language.ts', import.meta.url)),
+        'utils/markdown': fileURLToPath(new URL('./src/utils/markdown.ts', import.meta.url)),
       },
       formats: ['es'],
     },
