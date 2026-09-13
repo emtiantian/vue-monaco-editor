@@ -64,7 +64,6 @@ function handleClick() {
   }
   else {
     openFile(props.node.path)
-    setSelectedFolderPath(getParentPath(props.node.path))
   }
 }
 
@@ -336,6 +335,7 @@ const contextMenuItems = computed(() => [
         :key="child.path"
         :node="child"
         :depth="(depth || 0) + 1"
+        @download="emit('download', $event)"
       />
     </ul>
 
