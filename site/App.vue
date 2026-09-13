@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import Editor from '../src/web-code-editor.vue'
 import type { FileInput } from '../src/types'
 
 const lastEvent = ref('Ready')
+const editorRef = useTemplateRef('editor')
 const files: FileInput[] = [
   {
     path: '/src/main.ts',
@@ -24,6 +25,11 @@ const files: FileInput[] = [
     content: '# Vue Monaco IDE\n\nTry Cmd/Ctrl-click on `add` to jump across files.',
   },
 ]
+
+async function handleSave(payload: { path: string, content: string, name: string }) {
+  editorRef.value?.markFileSaved(payload.path, payload.content)
+  lastEvent.value = `Saved ${payload.path}`
+}
 </script>
 
 <template>
@@ -38,13 +44,14 @@ const files: FileInput[] = [
     </header>
     <section class="site__editor">
       <Editor
+        ref="editor"
         :files="files"
         default-open-path="/src/main.ts"
         :default-expanded-paths="['/src']"
         theme="web-code-editor-light"
         builtin-markdown-preview
         @ready="lastEvent = 'Editor ready'"
-        @save="lastEvent = `Saved ${$event.path}`"
+        @save="handleSave"
         @change="lastEvent = `Changed ${$event.path}`"
       />
     </section>

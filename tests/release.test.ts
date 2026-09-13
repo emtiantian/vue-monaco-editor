@@ -35,6 +35,15 @@ describe('component contracts', () => {
     await wrapper.get('input').setValue('third')
     expect(wrapper.emitted('update:modelValue')?.at(-1)).toEqual(['third'])
   })
+  it('keeps dirty state until the host confirms persistence', () => {
+    const store = createFileStore()
+    store.initFiles([{ path: '/a.ts', name: 'a.ts', content: 'draft', savedContent: 'saved' }])
+    store.openFile('/a.ts')
+    expect(store.openTabs.value[0]?.isDirty).toBe(true)
+    store.updateContent('/a.ts', 'saved')
+    store.saveFile('/a.ts')
+    expect(store.openTabs.value[0]?.isDirty).toBe(false)
+  })
   it('trims names and cancels empty input or Escape', async () => {
     const wrapper = mount(CreateNodeInput, { props: { isDirectory: false } })
     wrappers.push(wrapper)

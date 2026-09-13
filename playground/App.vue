@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FileInput, WebCodeEditorServerHooks } from '../src/types'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 // yaml 语言服务子入口：引入后 .yml 获得完整语言服务（未引入时仅基础高亮）
 import '../src/subsets/yaml'
 import VueMonacoEditor from '../src/web-code-editor.vue'
@@ -157,9 +157,22 @@ features:
 ]
 
 const lastEvent = ref('')
+const editorRef = useTemplateRef('editor')
 
 function log(event: string) {
   lastEvent.value = `${new Date().toLocaleTimeString()} ${event}`
+}
+
+async function handleSave(payload: { path: string, content: string, name: string }) {
+  await sleep(300)
+  editorRef.value?.markFileSaved(payload.path, payload.content)
+  log(`saved by host: ${payload.path}`)
+}
+
+async function handleSaveAll(payload: Array<{ path: string, content: string, name: string }>) {
+  await sleep(300)
+  payload.forEach(file => editorRef.value?.markFileSaved(file.path, file.content))
+  log(`saved by host: ${payload.length} files`)
 }
 
 function sleep(ms: number): Promise<void> {
@@ -208,6 +221,7 @@ const serverHooks: WebCodeEditorServerHooks = {
     </div>
     <div class="page__editor">
       <VueMonacoEditor
+        ref="editor"
         :files="files"
         :server-hooks="serverHooks"
         default-open-path="/src/main.py"
@@ -215,8 +229,8 @@ const serverHooks: WebCodeEditorServerHooks = {
         theme="web-code-editor-light"
         builtin-markdown-preview
         @ready="log(`ready: ${$event.elapsedMs ?? '?'}ms`)"
-        @save="log(`save: ${$event.path}`)"
-        @save-all="log(`save-all: ${$event.length} files`)"
+        @save="handleSave"
+        @save-all="handleSaveAll"
         @change="log(`change: ${$event.path}`)"
         @download="log(`download: ${$event.path}`)"
         @worker-error="log(`worker-error: ${$event.type}`)"
