@@ -1,12 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { nextTick } from 'vue'
+import { defineComponent, h, nextTick } from 'vue'
 import SearchInput from '../src/search-input.vue'
 import CreateNodeInput from '../src/create-node-input.vue'
 import { setLocale, setMessages } from '../src/i18n'
-import { createFileStore } from '../src/composables/use-file-store'
+import { createFileStore, provideFileStore } from '../src/composables/use-file-store'
 import { renderMarkdownToHtml } from '../src/utils/markdown'
 import { resolveFileKind } from '../src/utils/file-kind'
+import TabBar from '../src/tab-bar.vue'
 
 const wrappers: Array<{ unmount: () => void }> = []
 afterEach(() => {
@@ -43,6 +44,42 @@ describe('component contracts', () => {
     store.updateContent('/a.ts', 'saved')
     store.saveFile('/a.ts')
     expect(store.openTabs.value[0]?.isDirty).toBe(false)
+  })
+  it('keeps newer edits dirty when an older save snapshot is confirmed', () => {
+    const store = createFileStore()
+    store.initFiles([{ path: '/a.ts', name: 'a.ts', content: 'initial' }])
+    store.openFile('/a.ts')
+    store.updateContent('/a.ts', 'request snapshot')
+    store.updateContent('/a.ts', 'newer edit')
+    store.markFileSaved('/a.ts', 'request snapshot')
+    expect(store.state.files[0]?.content).toBe('newer edit')
+    expect(store.openTabs.value[0]?.isDirty).toBe(true)
+    store.markFileSaved('/a.ts', 'newer edit')
+    expect(store.openTabs.value[0]?.isDirty).toBe(false)
+  })
+  it('shows save status for the active file instead of another dirty tab', async () => {
+    const store = createFileStore()
+    store.initFiles([
+      { path: '/clean.ts', name: 'clean.ts', content: 'clean' },
+      { path: '/dirty.ts', name: 'dirty.ts', content: 'draft', savedContent: 'saved' },
+    ])
+    store.openFile('/clean.ts')
+    const onSave = vi.fn()
+    const Host = defineComponent({
+      setup() {
+        provideFileStore(store)
+        return () => h(TabBar, { saveTime: '12:00', onSave })
+      },
+    })
+    const wrapper = mount(Host)
+    wrappers.push(wrapper)
+    expect(wrapper.get('.vme-draft').text()).toContain('已保存')
+    expect(wrapper.get<HTMLButtonElement>('.vme-save-btn').element.disabled).toBe(true)
+    store.updateContent('/clean.ts', 'changed')
+    await nextTick()
+    expect(wrapper.get('.vme-draft').text()).toContain('未保存')
+    await wrapper.get('.vme-save-btn').trigger('click')
+    expect(onSave).toHaveBeenCalledOnce()
   })
   it('trims names and cancels empty input or Escape', async () => {
     const wrapper = mount(CreateNodeInput, { props: { isDirectory: false } })

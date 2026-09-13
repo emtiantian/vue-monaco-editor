@@ -24,8 +24,14 @@ const emit = defineEmits<{
 const { openTabs, state, closeFile, setActive } = useFileStore()
 const tabBarRef = ref<HTMLDivElement | null>(null)
 
-// 草稿状态：有改动=未保存，无改动且有保存时间=已保存，否则不显示
-const isDirty = computed(() => state.files.some(f => f.content !== f.originalContent))
+// 保存按钮操作当前文件，因此这里同步展示当前活动文件的保存状态。
+// 其他文件的 dirty 状态仍保留在各自 tab 的圆点上。
+const activeFile = computed(() => state.files.find(file => file.path === state.activePath))
+const isDirty = computed(() => Boolean(
+  activeFile.value
+  && !activeFile.value.isDirectory
+  && activeFile.value.content !== activeFile.value.originalContent,
+))
 const draftStatus = computed<'saved' | 'dirty' | null>(() =>
   isDirty.value ? 'dirty' : (props.saveTime ? 'saved' : null),
 )

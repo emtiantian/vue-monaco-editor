@@ -153,6 +153,13 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
     }
   }
 
+  function markFileSaved(path: string, content: string) {
+    const file = state.files.find(f => f.path === path)
+    if (file) {
+      file.originalContent = content
+    }
+  }
+
   function saveFile(path: string) {
     const file = state.files.find(f => f.path === path)
     if (file) {
@@ -593,6 +600,7 @@ export function createFileStore(serverHooks?: WebCodeEditorServerHooks): FileSto
     closeFile,
     setActive,
     updateContent,
+    markFileSaved,
     saveFile,
     saveAll,
     toggleExpanded,

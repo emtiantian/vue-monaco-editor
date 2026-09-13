@@ -231,6 +231,8 @@ export interface FileStore {
   closeFile: (path: string) => void
   setActive: (path: string) => void
   updateContent: (path: string, content: string) => void
+  /** 仅更新已持久化基线，不覆盖保存请求发出后产生的新编辑 */
+  markFileSaved: (path: string, content: string) => void
   saveFile: (path: string) => void
   saveAll: () => void
   toggleExpanded: (path: string) => void
