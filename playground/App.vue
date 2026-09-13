@@ -77,7 +77,7 @@ console.log(len(v))
     path: '/assets/spec.pdf',
     name: 'spec.pdf',
     fileKind: 'pdf',
-    remoteUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
+    remoteUrl: `data:application/pdf,${encodeURIComponent('%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 0>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF')}`,
   },
   {
     path: '/assets/lib.zip',

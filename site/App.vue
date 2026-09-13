@@ -4,6 +4,7 @@ import { VueMonacoEditor as Editor } from '../src'
 import type { FileInput } from '../src'
 
 const lastEvent = ref('Ready')
+const showIntro = ref(true)
 const editorRef = useTemplateRef('editor')
 const files: FileInput[] = [
   {
@@ -34,7 +35,7 @@ const files: FileInput[] = [
     path: '/assets/sample.pdf',
     name: 'sample.pdf',
     fileKind: 'pdf',
-    remoteUrl: 'https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf',
+    remoteUrl: `data:application/pdf,${encodeURIComponent('%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Count 0>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF')}`,
   },
 ]
 
@@ -67,6 +68,18 @@ async function handleSave(payload: { path: string, content: string, name: string
         @change="lastEvent = `Changed ${$event.path}`"
       />
     </section>
+    <div v-if="showIntro" class="intro-backdrop">
+      <section class="intro-modal" role="dialog" aria-modal="true">
+        <h2>Before you start</h2>
+        <p>This is a feature demonstration:</p>
+        <ul>
+          <li><strong>Workers:</strong> loaded from CDN by default. Opening Python for the first time loads about 25 MB of Pyright. Production apps can use <code>configureWorkers</code> to bundle local workers.</li>
+          <li><strong>serverHooks:</strong> the playground simulates a 300 ms server request. Names or paths ending with <code>fail</code> intentionally fail; this is demo behavior, not a component restriction.</li>
+          <li><strong>Downloads:</strong> the component emits a download event; the caller implements the actual download.</li>
+        </ul>
+        <button type="button" class="intro-modal__close" @click="showIntro = false">Got it, start exploring</button>
+      </section>
+    </div>
   </main>
 </template>
 
@@ -80,4 +93,10 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 48px); letter-spacing: -.04em; }
 .intro { margin: 10px 0 0; color: #667085; }
 .status { color: #667085; font-size: 13px; }
 .site__editor { height: min(720px, calc(100vh - 190px)); min-height: 480px; max-width: 1280px; margin: 0 auto; overflow: hidden; border: 1px solid #dfe3ed; border-radius: 14px; background: white; box-shadow: 0 20px 50px #3440541a; }
+.intro-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: #1118; }
+.intro-modal { width: min(620px, 100%); box-sizing: border-box; padding: 24px; border-radius: 12px; background: #fff; color: #333; box-shadow: 0 20px 60px #0003; }
+.intro-modal h2 { margin: 0 0 12px; font-size: 20px; }
+.intro-modal li { margin: 9px 0; line-height: 1.55; }
+.intro-modal code { padding: 1px 4px; border-radius: 3px; background: #f1f3f5; }
+.intro-modal__close { margin-top: 10px; padding: 8px 16px; border: 0; border-radius: 6px; color: #fff; background: #6654d9; cursor: pointer; }
 </style>
