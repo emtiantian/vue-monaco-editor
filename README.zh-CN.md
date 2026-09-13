@@ -241,7 +241,7 @@ configureWorkers({
 })
 ```
 
-worker 加载同样遵循下方三档策略：默认从 jsDelivr 的 `/+esm` 端点加载 YAML worker；可用 `workerUrls.yaml` 指定本地产物；`workerUrls.yaml: false` 禁用专属 worker（回退 editor worker，仅失去语言服务，高亮不受影响）。`@emtt/vue-monaco-ide/yaml` 子入口仅为旧用法保留。
+worker 加载同样遵循下方三档策略：默认从 jsDelivr 的 `/+esm` 端点加载 YAML worker；可用 `workerUrls.yaml` 指定本地产物；`workerUrls.yaml: false` 禁用专属 worker（回退 editor worker，仅失去语言服务，高亮不受影响）。YAML 服务仅在打开 YAML 文件时初始化。
 
 ## Worker 加载策略
 
@@ -448,7 +448,7 @@ setFeedbackProvider({
 ## 局限性与注意事项
 
 - 仅浏览器 ESM 使用；不承诺 SSR 或 CommonJS。Vue 声明使用 3.5 类型 API，因此不再声明支持 Vue 3.3/3.4。Monaco 支持范围收紧至实际开发使用的 0.52.2 系列。
-- 当前没有已部署演示站或截图；Python/TS 的浏览器补全与 CDN Worker 联调仍需人工验收。
+- [GitHub Pages 在线演示](https://emtiantian.github.io/vue-monaco-editor/)与本地 playground 使用同一套完整示例。
 
 - **Pyright worker 加载与初始化有开销**：按需加载，仅项目含 Python 文件时才拉取；首次分析（加载 typeshed、解析 import）需要数秒，期间显示「Python LSP 分析中」轻提示
 - **serverHooks 在途竞态**：钩子请求进行期间外部重置 `files` prop 不做防护，宿主应避免在钩子在途时整体替换文件列表
@@ -456,7 +456,7 @@ setFeedbackProvider({
 - **yaml 语言服务的 schema 请求固定关闭**：`enableSchemaRequest: false`，schema 需内联传入 `yamlSchemas[].schema`（默认 worker 走 CDN `/+esm` 端点，断网或 `workerUrls.yaml: false` 时仅保留基础高亮）
 - **浏览器内存**：大型项目（数百文件全量 TS model 同步）会占用较多内存，model 创建已做分块让出主线程，但超大工程建议分批挂载
 - **删除确认/提示**默认为内置 DOM 实现，可[接管](#接管-toast--确认弹窗)
-- **文件夹下载**未实现（前端 store 仅持有文本文件），预留 TODO
+- **下载由调用方负责**：组件只发出 `download` 事件，文件夹及任意二进制文件的获取、打包和权限控制由业务层实现
 - 单实例编辑器区域（一个组件一个 Monaco editor 实例；文件树/页签为组件内部状态）
 
 ## 开发

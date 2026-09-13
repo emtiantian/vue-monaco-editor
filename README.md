@@ -146,9 +146,9 @@ The component ref exposes `save()`, `saveAll()`, `openFile(path)`, `closeFile(pa
 
 ## Server integration
 
-`serverHooks` supports asynchronous `createFile({ parentPath, name })`, `createDirectory({ parentPath, name })`, `rename({ path, newName, isDirectory })`, `remove({ path, isDirectory })` and `move({ sourcePath, targetFolderPath, isDirectory })`. Return `true` to apply the local operation, or `false`/throw to reject it. The host owns error reporting. Duplicate matching operations are ignored while a hook is pending.
+`serverHooks` supports asynchronous `createFile({ parentPath, name })`, `createDirectory({ parentPath, name })`, `rename({ path, newName, isDirectory })`, `remove({ path, isDirectory })` and `move({ sourcePath, targetFolderPath, isDirectory })`. Return `true` to apply the local operation, or `false`/throw to reject it. You may also return `{ ok: false, code, message }`; the component emits `operation-error` and leaves local state unchanged. Duplicate matching operations are ignored while a hook is pending.
 
-Without hooks, operations are local. Avoid replacing the entire `files` prop while a hook is pending. Directory nesting is limited to 10 path segments. Folder downloads are not implemented. Persist save/download events in your own backend integration.
+Without hooks, operations are local. Avoid replacing the entire `files` prop while a hook is pending. Directory nesting is limited to 10 path segments. The component emits download requests; the host owns fetching, packaging and permissions for files or folders.
 
 ## Localization and appearance
 
