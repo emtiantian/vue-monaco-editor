@@ -44,7 +44,7 @@ const files: FileInput[] = [
 </template>
 ```
 
-The CSS import is required. Alternatively, register the default plugin with `app.use(EditorPlugin, { locale: 'en-US' })`, importing `EditorPlugin` from the package. The default registered component name is `VueMonacoEditor`; `componentName` can override it. The named component is also exported as `WebCodeEditor`.
+The CSS import is required. Alternatively, register the default plugin with `app.use(EditorPlugin, { locale: 'en-US' })`, importing `EditorPlugin` from the package. The default registered component name is `VueMonacoEditor`; `componentName` can override it.
 
 ## Workers
 
@@ -88,7 +88,7 @@ configureWorkers({
 })
 ```
 
-YAML validation, completion and hover are registered by the main entry and `monaco-yaml` is installed with the package. The `/yaml` entry remains available for compatibility but is no longer required. Schema fetching is disabled: supply schema contents inline. `workerUrls.yaml: false` disables the worker; syntax highlighting remains available.
+YAML validation, completion and hover are registered by the main entry and `monaco-yaml` is installed with the package. The service is loaded only when a YAML file is opened. Schema fetching is disabled: supply schema contents inline. `workerUrls.yaml: false` disables the worker; syntax highlighting remains available.
 
 ## Component API
 

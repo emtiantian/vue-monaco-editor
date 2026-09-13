@@ -17,7 +17,6 @@ import _WebCodeEditor from './web-code-editor.vue'
 import { setLocale } from './i18n'
 import { configureWorkers } from './utils/monaco-environment'
 import './styles/index.css'
-// YAML 校验与补全属于默认编辑器能力；/yaml 子入口继续保留用于向后兼容。
 import './subsets/yaml'
 
 export * from './types'
@@ -37,9 +36,6 @@ export { tryActivateYaml, setYamlActivator } from './utils/yaml-gate'
 
 /** 对外主组件：完整的文件树 + 页签 + Monaco 编辑器工作台 */
 export const VueMonacoEditor = markRaw(_WebCodeEditor)
-
-/** 兼容旧命名 */
-export const WebCodeEditor = VueMonacoEditor
 
 export interface VueMonacoEditorPluginOptions {
   /**

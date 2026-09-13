@@ -26,10 +26,6 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/vue-monaco-ide.js"
     },
-    "./yaml": {
-      "types": "./dist/types/subsets/yaml.d.ts",
-      "import": "./dist/vue-monaco-ide-yaml.js"
-    },
     "./style.css": "./dist/style.css"
   },
   "files": [
@@ -40,8 +36,7 @@
     "CHANGELOG.md"
   ],
   "sideEffects": [
-    "**/*.css",
-    "./dist/vue-monaco-ide-yaml.js"
+    "**/*.css"
   ],
   "scripts": {
     "dev": "vite --config playground/vite.config.ts",

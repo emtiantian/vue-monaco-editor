@@ -385,7 +385,7 @@ export interface VueMonacoEditorPluginOptions {
 
 ```ts
 import {
-  VueMonacoEditor,     // 主组件（别名 WebCodeEditor）
+  VueMonacoEditor,     // 主组件
   configureWorkers,    // worker 配置
   setFeedbackProvider, // 接管 toast / confirm 弹窗
   // —— 工具函数（宿主可直接复用）——
