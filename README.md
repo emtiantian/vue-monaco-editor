@@ -150,6 +150,8 @@ The component ref exposes `save()`, `saveAll()`, `openFile(path)`, `closeFile(pa
 
 Without hooks, operations are local. Avoid replacing the entire `files` prop while a hook is pending. Directory nesting is limited to 10 path segments. The component emits download requests; the host owns fetching, packaging and permissions for files or folders.
 
+When rendering multiple editors on one page, file paths must be globally unique across all instances. Monaco uses the path as the model URI; reusing `/src/main.ts` in two editors can make them share content, diagnostics, or lifecycle state. Add an application or project prefix in the caller's `files` paths when necessary.
+
 ## Localization and appearance
 
 Simplified Chinese is the default. Use plugin option `locale`, or switch dynamically:
