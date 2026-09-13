@@ -126,7 +126,7 @@ interface FileInput {
 | `save-all` | Array of changed files, each `{ path, content, name }` |
 | `change` | `{ path, content, name, isDirty }` |
 | `open-file`, `close-file` | File path |
-| `publish`, `refresh` | None |
+| `publish`, `refresh` | None | `publish` is a host-defined release/deploy action; the component only emits the event |
 | `ready` | `{ elapsedMs?: number }` |
 | `worker-error` | `{ type: 'python' \| 'typescript', error }` |
 | `operation-error` | `{ operation, path?, targetPath?, message?, code?, cause? }` | A server hook rejected or failed; local state is unchanged |

@@ -341,7 +341,7 @@ interface FileInput {
 | `change` | `{ path, content, name, isDirty }` | 活动文件内容变化 |
 | `open-file` | `path: string` | 打开文件（含跳转定义跨文件切换） |
 | `close-file` | `path: string` | 关闭页签 |
-| `publish` | - | 点击发布按钮 |
+| `publish` | - | 点击发布按钮；组件只发出事件，实际提交/部署由调用方实现 |
 | `refresh` | - | 点击文件树刷新按钮 |
 | `ready` | `{ elapsedMs?: number }` | 编辑器初始化完成、可交互 |
 | `worker-error` | `{ type: 'python' \| 'typescript', error }` | worker 预加载失败（非致命） |

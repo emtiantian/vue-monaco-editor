@@ -172,6 +172,14 @@ function handleDownload(payload: { path: string, name: string }) {
   downloadNoticeTimer = setTimeout(() => { downloadNotice.value = '' }, 4500)
 }
 
+function handlePublish() {
+  log('publish requested')
+  downloadNotice.value = '已触发发布事件。组件不会自动提交或部署，实际发布流程由调用方实现。'
+  if (downloadNoticeTimer)
+    clearTimeout(downloadNoticeTimer)
+  downloadNoticeTimer = setTimeout(() => { downloadNotice.value = '' }, 4500)
+}
+
 async function handleSave(payload: { path: string, content: string, name: string }) {
   await sleep(300)
   editorRef.value?.markFileSaved(payload.path, payload.content)
@@ -240,6 +248,7 @@ const serverHooks: WebCodeEditorServerHooks = {
         @save-all="handleSaveAll"
         @change="log(`change: ${$event.path}`)"
         @download="handleDownload"
+        @publish="handlePublish"
         @worker-error="log(`worker-error: ${$event.type}`)"
       />
     </div>
