@@ -1,6 +1,6 @@
 {
   "name": "@emtt/vue-monaco-ide",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "一个基于 Monaco Editor 的零 UI 框架依赖 Vue 3 代码编辑器工作台，集成由 Pyright LSP 驱动的 Python 智能提示，支持 TS/JS/Python/YAML/Markdown/JSON、二进制文件/图片/PDF 预览、服务端钩子、文件树、多页签和跨文件导航。",
   "type": "module",
   "license": "MIT",
