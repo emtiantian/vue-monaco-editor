@@ -16,7 +16,6 @@ import { markRaw } from 'vue'
 import _WebCodeEditor from './web-code-editor.vue'
 import { setLocale } from './i18n'
 import { configureWorkers } from './utils/monaco-environment'
-import './styles/index.css'
 import './subsets/yaml'
 
 export * from './types'

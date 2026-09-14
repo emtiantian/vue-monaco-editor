@@ -27,6 +27,7 @@ export default defineConfig({
         'utils/path': fileURLToPath(new URL('./src/utils/path.ts', import.meta.url)),
         'utils/language': fileURLToPath(new URL('./src/utils/language.ts', import.meta.url)),
         'utils/markdown': fileURLToPath(new URL('./src/utils/markdown.ts', import.meta.url)),
+        style: fileURLToPath(new URL('./src/style-entry.ts', import.meta.url)),
       },
       formats: ['es'],
     },

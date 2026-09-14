@@ -56,7 +56,7 @@
   ],
   "scripts": {
     "dev": "vite --config playground/vite.config.ts",
-    "build": "vite build && vue-tsc --project tsconfig.build.json --emitDeclarationOnly && node scripts/fix-declarations.mjs",
+    "build": "vite build && vue-tsc --project tsconfig.build.json --emitDeclarationOnly",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
