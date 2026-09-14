@@ -102,7 +102,7 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 48px); letter-spacing: -.04em; }
 .intro { margin: 10px 0 0; color: #667085; }
 .status { color: #667085; font-size: 13px; }
 .site__editor { height: min(720px, calc(100vh - 190px)); min-height: 480px; max-width: 1280px; margin: 0 auto; overflow: hidden; border: 1px solid #dfe3ed; border-radius: 14px; background: white; box-shadow: 0 20px 50px #3440541a; }
-.intro-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: #1118; }
+.intro-backdrop { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: #1118; }
 .intro-modal { width: min(620px, 100%); box-sizing: border-box; padding: 24px; border-radius: 12px; background: #fff; color: #333; box-shadow: 0 20px 60px #0003; }
 .intro-modal h2 { margin: 0 0 12px; font-size: 20px; }
 .intro-modal li { margin: 9px 0; line-height: 1.55; }

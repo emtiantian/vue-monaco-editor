@@ -293,7 +293,7 @@ const serverHooks: WebCodeEditorServerHooks = {
   flex: 1;
   min-height: 0;
 }
-.intro-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: #1118; }
+.intro-backdrop { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: #1118; }
 .intro-modal { width: min(620px, 100%); box-sizing: border-box; padding: 24px; border-radius: 12px; background: #fff; color: #333; box-shadow: 0 20px 60px #0003; }
 .intro-modal h2 { margin: 0 0 12px; font-size: 20px; }
 .intro-modal li { margin: 9px 0; line-height: 1.55; }
