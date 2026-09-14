@@ -1,6 +1,6 @@
 <!--
 感谢贡献！提交 PR 前请先阅读 CONTRIBUTING.md。
-填写完成后删除不适用的部分。完整填写示例见 docs/pr-example.md。
+填写完成后删除不适用的部分。
 -->
 
 ## 变更说明
@@ -21,7 +21,7 @@
 
 ## 自测清单
 
-- [ ] `pnpm lint` 通过
+- [ ] `pnpm quality` 通过
 - [ ] `pnpm type-check` 通过
 - [ ] `pnpm build` 通过
 - [ ] `pnpm dev` 打开 playground 手动验证受影响功能（TS/JS 智能提示、Python Pyright 补全与跳转、文件树增删改/拖拽、页签、Markdown 预览插槽）

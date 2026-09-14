@@ -4,7 +4,7 @@
 
 ## 环境准备
 
-- Node.js >= 18（推荐 22）
+- Node.js >= 24
 - pnpm >= 10
 
 ```bash
@@ -17,13 +17,14 @@ pnpm dev   # playground，http://localhost:5180
 1. 从 `main` 拉出特性分支：`feat/xxx`、`fix/xxx`
 2. 确保本地通过：
    ```bash
-   pnpm lint
+   pnpm quality
    pnpm type-check
-   pnpm test
+   pnpm test:dev
    pnpm build
+   pnpm build:site
    ```
 3. 在 playground 中手动验证受影响功能（尤其：Python Pyright 补全/跳转、TS 跨文件解析、文件树增删改拖拽、页签、Markdown 预览插槽）
-4. 按 `.github/PULL_REQUEST_TEMPLATE.md` 填写 PR 描述（填写示范见 [docs/pr-example.md](docs/pr-example.md)）
+4. 按 `.github/PULL_REQUEST_TEMPLATE.md` 填写 PR 描述
 
 ## 提交信息
 
@@ -58,4 +59,4 @@ src/
 
 ## 发布
 
-仅手动发布，CI 只执行检查、测试、构建及打包。参见 [发布清单](NEEDS_FROM_YOU.md)。
+仅手动发布，CI 只执行质量检查、测试、构建及打包。发布前执行 `pnpm pack`，确认 tarball 后再使用 `pnpm publish:npm`。

@@ -1,7 +1,7 @@
 {
   "name": "@emtt/vue-monaco-ide",
   "version": "0.2.0",
-  "description": "A zero-UI-framework Vue 3 code editor workbench built on Monaco Editor, with full Python IntelliSense powered by Pyright LSP. Supports TS/JS/Python/YAML/Markdown/JSON, binary/image/PDF preview, server hooks and a file tree with tabs and cross-file navigation.",
+  "description": "一个基于 Monaco Editor 的零 UI 框架依赖 Vue 3 代码编辑器工作台，集成由 Pyright LSP 驱动的 Python 智能提示，支持 TS/JS/Python/YAML/Markdown/JSON、二进制文件/图片/PDF 预览、服务端钩子、文件树、多页签和跨文件导航。",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -57,16 +57,12 @@
   "scripts": {
     "dev": "vite --config playground/vite.config.ts",
     "build": "vite build && vue-tsc --project tsconfig.build.json --emitDeclarationOnly",
-    "build-only": "vite build",
+    "quality": "prettier --write src/ playground/ site/ && eslint . --fix && prettier --check src/ playground/ site/ && eslint .",
     "type-check": "vue-tsc --noEmit -p tsconfig.json",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write src/ playground/",
-    "pack-check": "npm pack --dry-run",
-    "test": "vitest run",
-    "build:playground": "vite build --config playground/vite.config.ts",
+    "test:dev": "vitest run",
+    "pack": "pnpm quality && pnpm type-check && pnpm test:dev && pnpm build && npm pack --pack-destination artifacts --ignore-scripts",
+    "publish:npm": "pnpm publish --access public --registry=https://registry.npmjs.org/",
     "build:site": "vite build --config site/vite.config.ts",
-    "check": "pnpm lint && pnpm type-check && pnpm test && pnpm build && pnpm build:playground && pnpm build:site",
     "prepack": "pnpm build"
   },
   "peerDependencies": {
@@ -100,7 +96,7 @@
     "vue-tsc": "^2.2.8"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=24"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

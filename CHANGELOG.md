@@ -1,25 +1,25 @@
-# Changelog
+# 更新日志
 
 本项目的所有显著变更都记录在此文件中。
 
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
 版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
-## [Unreleased]
+## [0.2.1] - 2026-09-14
 
-### npm release preparation
+### npm 发布准备
 
-- Make YAML validation, completion and hover part of the default entry; `monaco-yaml` is now a runtime dependency and `/yaml` remains a compatibility entry.
-- Replace the invisible 1×1 image and externally blocked PDF demo assets with visible, embeddable examples.
-- Verify that generated declarations and public types are present in the packed npm artifact and consumable with strict TypeScript settings.
-- Add a manual Save button and make save requests caller-confirmed: `save`/`save-all` no longer clear dirty state before persistence; call `markFileSaved` after successful persistence (`setFileContent` remains compatible).
-- Make the toolbar save status follow the active file, while other dirty files remain indicated by their tab dots; `markFileSaved` now updates only the saved baseline so an older save response cannot overwrite newer edits.
+- 默认入口提供 YAML 校验、补全和悬停提示；`monaco-yaml` 改为运行依赖，YAML 服务从主入口加载。
+- 将不可见图片和外部受限的 PDF 演示资源替换为可见、可嵌入的示例。
+- 验证打包 npm 产物包含类型声明和公共类型，并可在严格 TypeScript 配置下使用。
+- 增加手动保存按钮，保存请求改为由调用方确认：持久化完成前 `save`/`save-all` 不清除脏状态，成功后调用 `markFileSaved`（`setFileContent` 仍兼容）。
+- 工具栏保存状态跟随当前活动文件，其他未保存文件仍通过页签圆点标记；`markFileSaved` 只更新保存基线，避免旧保存响应覆盖较新的编辑内容。
 
-- Prepare `@emtt/vue-monaco-ide@0.2.0` as an unpublished candidate; previous dated sections describe development milestones, not verified npm releases.
-- Add English/Chinese documentation, manual release configuration and regression tests.
-- Fix reactive locale/message updates and preserve the YAML registration entry during tree shaking.
-- Compatibility change: require Vue ^3.5.0 (generated declarations use Vue 3.5 APIs) and Monaco ~0.52.2; older combinations are unverified.
-- Remove tag-triggered npm publishing; CI only checks, tests, builds and packs.
+- 发布 `@emtt/vue-monaco-ide@0.2.0` 并完成 Pages 演示站。
+- 增加中英文文档、手动发布配置和回归测试。
+- 修复 locale/文案覆盖的响应式更新，并确保 YAML 注册入口不会被 tree shaking 移除。
+- 兼容性变更：要求 Vue ^3.5.0（生成的声明使用 Vue 3.5 API）和 Monaco ~0.52.2；更旧版本组合尚未验证。
+- 移除基于 tag 的自动 npm 发布；CI 只执行检查、测试、构建和打包。
 
 
 ### 修复
@@ -37,7 +37,7 @@
 - **非文本文件体系**：新增 `FileKind` 四分类（text/image/pdf/binary），判定优先级为显式标记 > 扩展名 > 内容嗅探；image/pdf 带 `remoteUrl` 时在线预览（`mediaPreview` prop 可关），binary 走下载占位卡片并触发 `download` 事件
 - **`savedContent` 基线**：脏状态以 `savedContent ?? content` 为准，支持「云端内容 ≠ 本地草稿」场景
 - **彩色文件类型图标**：内置 50+ 高频扩展名的 vscode-icons 风格 SVG 图标（零依赖内联双色 glyph），目录折叠/展开双态，冷门扩展名回退原文字徽章
-- **yaml 语言服务**：可选子入口 `@emtt/vue-monaco-ide/yaml` + 可选 peer `monaco-yaml@^5`；基础高亮开箱即用，引入子入口后获得 schema 校验/补全/悬停；worker 默认走 jsDelivr `/+esm` 端点，支持 `workerUrls.yaml` 指定或 `false` 禁用
+- **yaml 语言服务**：主入口默认提供 YAML 服务，首次打开 YAML 时按需加载；`monaco-yaml` 为运行依赖，支持 `workerUrls.yaml` 指定或 `false` 禁用
 - **内置 Markdown 预览**：`builtinMarkdownPreview` prop 启用零依赖轻量渲染器（标题/代码块/列表/引用/表格/行内标记）；安全模型为白名单重建（全转义 + 标签/属性/URL 协议三方白名单）；`#preview` 插槽仍优先
 - **目录深度上限**：路径层级最多 10 层（`MAX_PATH_DEPTH`），新建与跨目录拖拽均校验子孙深度
 - **实例方法 `setFileContent(path, content)`**：外部写入内容并标记已保存（revision 冲突回写）

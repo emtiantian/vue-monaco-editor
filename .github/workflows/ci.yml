@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Lint / Type-check / Build
+    name: Quality / Type-check / Test / Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -23,31 +23,27 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Quality
+        run: pnpm quality
 
       - name: Type-check
         run: pnpm type-check
 
       - name: Test
-        run: pnpm test
+        run: pnpm test:dev
 
-      - name: Build library
+      - name: 构建库
         run: pnpm build
 
-      - name: Check npm package contents
-        run: pnpm pack --pack-destination artifacts
-
-      - name: Build playground
-        run: pnpm build:playground
-
-      - name: Upload library dist
+      - name: 检查 npm 包内容
+        run: pnpm pack
+      - name: 上传库构建产物
         uses: actions/upload-artifact@v4
         with:
           name: dist

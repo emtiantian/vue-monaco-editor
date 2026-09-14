@@ -4,7 +4,7 @@ English | [简体中文](README.zh-CN.md)
 
 A Vue 3 component combining a Monaco code editor, file tree and tabs. It integrates Pyright for Python language services, supports cross-file TS/JS navigation, and provides optional Markdown and media previews. Its workbench UI uses ordinary CSS and inline icons, with no UI framework dependency.
 
-Version 0.2.0 is a release candidate and has not been published in this preparation pass. No hosted demo is available yet; use `pnpm dev` for the local playground.
+Version 0.2.0 is published on npm. Try the hosted demo on GitHub Pages or run `pnpm dev` for the local playground.
 
 Repository: [github.com/emtiantian/vue-monaco-editor](https://github.com/emtiantian/vue-monaco-editor) · Demo: [GitHub Pages](https://emtiantian.github.io/vue-monaco-editor/)
 
@@ -16,7 +16,7 @@ After publication:
 pnpm add @emtt/vue-monaco-ide vue@^3.5 monaco-editor@~0.52.2 monaco-pyright-lsp@^0.1.7
 ```
 
-Browser ESM only. Vue 3.5 is required by the generated declarations. Monaco 0.52.2 is the development baseline; older Monaco and Vue versions, SSR and CommonJS are not supported by this release contract. `vscode-languageserver` is installed as a runtime dependency. Development uses pnpm 10 and Node.js 22.
+Browser ESM only. Vue 3.5 is required by the generated declarations. Monaco 0.52.2 is the development baseline; older Monaco and Vue versions, SSR and CommonJS are not supported by this release contract. `vscode-languageserver` is installed as a runtime dependency. Development uses pnpm 10 and Node.js 24.
 
 ## Quick start
 
@@ -176,10 +176,14 @@ The built-in Markdown preview supports headings, fenced code, lists, blockquotes
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
-pnpm check
-pnpm pack --pack-destination artifacts
+pnpm quality
+pnpm type-check
+pnpm test:dev
+pnpm build
+pnpm build:site
+pnpm pack
 ```
 
-CI checks, tests, builds and packs only. npm publication is a separate manual step using a verified tarball. See [release checklist](NEEDS_FROM_YOU.md), [contribution guide](CONTRIBUTING.md) and [changelog](CHANGELOG.md). Repository metadata must be confirmed before publication.
+CI checks, tests, builds and packs only. npm publication is a separate manual step using a verified tarball. See [contribution guide](CONTRIBUTING.md) and [changelog](CHANGELOG.md). Repository metadata must be confirmed before publication.
 
 [MIT](LICENSE). Author: hao503106@163.com ([GitHub](https://github.com/emtiantian)).

@@ -110,12 +110,12 @@ const x: number = 1
 `,
     savedContent: '# 云端基线',
   },
-  // —— yaml 语言服务（已引 subsets/yaml 子入口）——
+  // —— YAML 语言服务（主入口按需加载）——
   {
     path: '/config/app.yml',
     name: 'app.yml',
     language: 'yaml',
-    content: `# 基础高亮开箱即用；引入 vue-monaco-ide/yaml 后有 schema 校验与补全
+    content: `# YAML 基础高亮开箱即用；打开 YAML 文件时按需加载语言服务
 server:
   host: localhost
   port: 5180
@@ -136,7 +136,7 @@ features:
 - **TypeScript / JavaScript**：内置 TS worker，支持跨文件解析
 - **Markdown**：内置轻量预览（右上角切换按钮），也可换 \`#preview\` 插槽接入自己的渲染器
 - **JSON**：内置 JSON worker，支持格式化与 schema 校验
-- **YAML**：本 playground 引入了 yaml 子入口，有校验与补全
+- **YAML**：打开 YAML 文件时按需加载语言服务，支持校验与补全
 - **图片 / PDF / 二进制**：assets/ 目录下各有一个示例
 - **serverHooks**：新建/重命名/删除/移动会先走 mock 服务端钩子（300ms 延迟）；名称含 \`fail\` 的操作会被服务端拒绝
 `,

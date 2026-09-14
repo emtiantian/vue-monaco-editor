@@ -465,18 +465,19 @@ setFeedbackProvider({
 ```bash
 pnpm install
 pnpm dev           # playground（http://localhost:5180）
-pnpm test          # 行为测试
-pnpm lint          # eslint
+pnpm quality       # 格式化并检查 ESLint
 pnpm type-check    # vue-tsc
+pnpm test:dev      # 行为测试
 pnpm build         # 库构建（dist/）+ 类型声明（dist/types/）
-pnpm pack-check    # 预览 npm 包内容
+pnpm build:site    # Pages 最小消费者示例
+pnpm pack          # 验证并生成实际 npm tarball
 ```
 
-贡献指南见 [CONTRIBUTING.md](CONTRIBUTING.md)，PR 模板填写示范见 [docs/pr-example.md](docs/pr-example.md)。
+贡献指南见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 发布
 
-仅手动发布；CI 执行检查、测试、构建与打包。见 [发布清单](NEEDS_FROM_YOU.md)。当前 0.2.0 为候选版本，尚未发布。
+仅手动发布；CI 执行质量检查、测试、构建与打包。发布前使用 `pnpm publish:npm`，并先确认 tarball、版本号和 npm 登录状态。当前 0.2.0 已发布。
 
 ## License
 
